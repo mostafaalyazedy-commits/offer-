@@ -55,15 +55,13 @@
   /* ── SMART PRODUCT PHOTO ENGINE ── */
   .product-image {
     aspect-ratio: 1 / 1;
-    background: var(--pi-bg, linear-gradient(135deg, #f8f8f8 0%, #efefef 100%));
+    background: #fff;
     border: none;
     border-radius: 12px;
     display: flex; align-items: center; justify-content: center;
     position: relative; overflow: hidden;
     margin-bottom: 4px;
     transition: background 0.4s ease;
-    /* ensure it has dimensions so absolute children render */
-    min-height: 60px;
   }
   /* Loading shimmer */
   .product-image.pi-loading::after {
@@ -78,21 +76,29 @@
   }
   @keyframes pi-shimmer { 0%{background-position:200% 0} 100%{background-position:-200% 0} }
   /* Smart image inside */
-  /* Product image inner img — smart styling */
-  .product-image img {
-    max-width: 94%; max-height: 94%;
+  .pi-img-wrap {
+    position: absolute; inset: 3%;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .pi-img-wrap img {
+    max-width: 100%; max-height: 100%;
     width: auto; height: auto;
     object-fit: contain;
     display: block;
-    filter: drop-shadow(0 4px 16px rgba(0,0,0,0.13));
-    transition: transform 0.25s ease, opacity 0.4s ease;
+    filter: drop-shadow(0 4px 16px rgba(0,0,0,0.13)) drop-shadow(0 1px 4px rgba(0,0,0,0.08));
+    transition: transform 0.25s ease, filter 0.25s ease;
+    image-rendering: -webkit-optimize-contrast;
+    image-rendering: crisp-edges;
   }
-  .product-image:hover img { transform: scale(1.05); }
+  .product-image:hover .pi-img-wrap img {
+    transform: scale(1.06);
+    filter: drop-shadow(0 8px 24px rgba(0,0,0,0.18)) drop-shadow(0 2px 6px rgba(0,0,0,0.1));
+  }
   /* Gradient overlay bottom fade */
   .product-image::after {
     content: "";
     position: absolute; bottom: 0; left: 0; right: 0; height: 22%;
-    background: linear-gradient(to top, var(--pi-fade, rgba(248,248,248,0.5)), transparent);
+    background: transparent;
     pointer-events: none;
     z-index: 1;
   }
@@ -279,6 +285,7 @@
   .slot-img { width: 100%; height: 100%; object-fit: cover; display: block; }
   /* slot-img inside product-image handled by .pi-img-wrap */
   .product-image > .slot-img { object-fit: contain; max-width: 94%; max-height: 94%; width: auto; height: auto; }
+  .product-image img.slot-img { padding: 6px; }
   .toc-tile .tt-img .slot-img { object-fit: cover; }
   .cover-hero .image-frame .slot-img { object-fit: cover; }
   .hero-product .hp-img .slot-img { object-fit: contain; padding: 6%; background: white; }
@@ -419,9 +426,9 @@
     /* ── PRODUCT GRIDS mobile ── */
     .grid-4, .grid-3 { grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 0 !important; }
     .grid-4 .product-card, .grid-3 .product-card { padding: 13px 13px 0 !important; gap: 8px; min-height: 0; }
-    /* Product images mobile */
+    /* Smart engine on mobile */
     .product-image { aspect-ratio: 1 / 1 !important; border-radius: 10px !important; }
-    .product-image img { max-width: 90% !important; max-height: 90% !important; width: auto !important; height: auto !important; object-fit: contain !important; }
+    .pi-img-wrap { inset: 4% !important; }
     .product-name { font-size: 18px !important; min-height: 46px !important; -webkit-line-clamp: 2; }
     .product-vol { font-size: 14px !important; }
     .product-cat { font-size: 11px !important; }
@@ -664,18 +671,9 @@ function imageUrlFor(p) {
 
 function productImageBlock(p) {
   const url = imageUrlFor(p);
-  const alt = p.product_name_ar || p.item_code || "";
   if (!url) return PH_HTML;
-  // Smart Engine: lazy-load with shimmer + dynamic gradient
-  return `<img
-    src="${escapeHtml(url)}"
-    alt="${escapeHtml(alt)}"
-    loading="lazy"
-    decoding="async"
-    style="max-width:94%;max-height:94%;width:auto;height:auto;object-fit:contain;display:block;opacity:0;transition:opacity 0.4s ease;filter:drop-shadow(0 6px 18px rgba(0,0,0,0.15)) drop-shadow(0 1px 4px rgba(0,0,0,0.08));"
-    onload="this.style.opacity='1';smartBgFromImg(this);"
-    onerror="this.outerHTML='${PH_HTML.replace(/'/g,"\'").replace(/`/g,'\`')}'"
-  >`;
+  const safePh = PH_HTML.replace(/'/g,"\\'").replace(/"/g,"&quot;");
+  return `<img src="${escapeHtml(url)}" alt="${escapeHtml(p.product_name_ar||p.item_code||"")}" class="slot-img" onerror="this.outerHTML='${safePh}'">`;
 }
 
 function setStatus(text, kind) {
@@ -769,21 +767,6 @@ function renderProductCard(p) {
 /* ================================================================
    HERO PRODUCT RENDER
    ================================================================ */
-
-function heroImageBlock(url, alt) {
-  if (!url) return PH_HTML;
-  const safePh = PH_HTML.replace(/'/g,"\'");
-  return `<img
-    src="${escapeHtml(url)}"
-    alt="${escapeHtml(alt||"")}"
-    class="slot-img"
-    loading="lazy"
-    decoding="async"
-    style="opacity:0;transition:opacity 0.4s ease;object-fit:contain;width:100%;height:100%;padding:6%;background:white;"
-    onload="this.style.opacity='1';smartBgFromImg(this);"
-    onerror="this.outerHTML='${safePh}';"
-  >`;
-}
 
 function renderHeroProduct(p, cat) {
   if (!p) return "";
@@ -1247,51 +1230,17 @@ applyPageScale();
 
 
 /* ================================================================
-   SMART PRODUCT PHOTO ENGINE — Simple & Reliable
+   SAFE IMAGE MODE — restored stable rendering
+   - No canvas / CORS color extraction
+   - No duplicated productImageBlock override
+   - Keeps original magazine/card layout intact
    ================================================================ */
 
-// Extract dominant color via canvas (works only if CORS allows)
-function extractDominantColor(img) {
-  try {
-    const c = document.createElement("canvas");
-    c.width = c.height = 40;
-    const ctx = c.getContext("2d");
-    ctx.drawImage(img, 0, 0, 40, 40);
-    const data = ctx.getImageData(0, 0, 40, 40).data;
-    let r=0, g=0, b=0, n=0;
-    for (let i=0; i<data.length; i+=4) {
-      if (data[i+3]<30) continue;
-      const br=(data[i]+data[i+1]+data[i+2])/3;
-      if (br>235||br<15) continue;
-      r+=data[i]; g+=data[i+1]; b+=data[i+2]; n++;
-    }
-    return n>10 ? {r:Math.round(r/n), g:Math.round(g/n), b:Math.round(b/n)} : null;
-  } catch(e) { return null; }
-}
-
-function smartBgFromImg(imgEl) {
-  const container = imgEl.closest(".product-image");
-  if (!container) return;
-  try {
-    const col = extractDominantColor(imgEl);
-    if (!col) return;
-    const {r,g,b} = col;
-    // Convert to HSL for muted pastel
-    const rr=r/255, gg=g/255, bb=b/255;
-    const max=Math.max(rr,gg,bb), min=Math.min(rr,gg,bb);
-    let h=0, s=0, l=(max+min)/2;
-    if (max!==min) {
-      const d=max-min;
-      s=l>0.5?d/(2-max-min):d/(max+min);
-      if(max===rr) h=((gg-bb)/d+(gg<bb?6:0))/6;
-      else if(max===gg) h=((bb-rr)/d+2)/6;
-      else h=((rr-gg)/d+4)/6;
-    }
-    const H=Math.round(h*360), S=Math.min(Math.round(s*100),30);
-    const L1=Math.min(Math.round(l*100)+30,95);
-    const L2=Math.min(Math.round(l*100)+18,88);
-    container.style.background = `linear-gradient(135deg,hsl(${H},${S}%,${L1}%) 0%,hsl(${(H+25)%360},${S}%,${L2}%) 100%)`;
-  } catch(e) {}
+function heroImageBlock(url, alt) {
+  const src = convertDriveUrl(url || "");
+  if (!src) return PH_HTML;
+  const safePh = PH_HTML.replace(/'/g,"\\'").replace(/"/g,"&quot;");
+  return `<img src="${escapeHtml(src)}" alt="${escapeHtml(alt||"")}" class="slot-img" loading="lazy" decoding="async" onerror="this.outerHTML='${safePh}'">`;
 }
 
 function boot() { wireToolbar(); loadMagazine(); }
