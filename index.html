@@ -55,7 +55,7 @@
   /* ── SMART PRODUCT PHOTO ENGINE ── */
   .product-image {
     aspect-ratio: 1 / 1;
-    background: #fff;
+    background: var(--pi-bg, linear-gradient(135deg, #f8f8f8 0%, #efefef 100%));
     border: none;
     border-radius: 12px;
     display: flex; align-items: center; justify-content: center;
@@ -98,7 +98,7 @@
   .product-image::after {
     content: "";
     position: absolute; bottom: 0; left: 0; right: 0; height: 22%;
-    background: transparent;
+    background: linear-gradient(to top, var(--pi-fade, rgba(248,248,248,0.5)), transparent);
     pointer-events: none;
     z-index: 1;
   }
@@ -285,7 +285,6 @@
   .slot-img { width: 100%; height: 100%; object-fit: cover; display: block; }
   /* slot-img inside product-image handled by .pi-img-wrap */
   .product-image > .slot-img { object-fit: contain; max-width: 94%; max-height: 94%; width: auto; height: auto; }
-  .product-image img.slot-img { padding: 6px; }
   .toc-tile .tt-img .slot-img { object-fit: cover; }
   .cover-hero .image-frame .slot-img { object-fit: cover; }
   .hero-product .hp-img .slot-img { object-fit: contain; padding: 6%; background: white; }
@@ -474,6 +473,223 @@
     .error-card .err-title { font-size: 24px; }
     .error-card .err-msg { font-size: 16px; }
   }
+
+
+  /* ================================================================
+     PREMIUM PRODUCT CARDS UPGRADE — Ocean Care / Pharmacy
+     Clean mobile-first ecommerce look inside the existing magazine grid
+     ================================================================ */
+  .product-card.premium-card {
+    background: linear-gradient(180deg, #ffffff 0%, #fffdf9 100%);
+    border: 1px solid rgba(14,61,110,0.13);
+    border-radius: 18px;
+    padding: 16px 16px 0 !important;
+    gap: 10px;
+    min-height: 0;
+    box-shadow: 0 18px 42px -26px rgba(10,42,77,0.36), 0 4px 14px rgba(10,42,77,0.08);
+    overflow: hidden;
+    isolation: isolate;
+  }
+  .product-card.premium-card::before {
+    height: 6px;
+    background: linear-gradient(90deg, var(--sec-accent, var(--teal)), var(--teal-soft));
+    opacity: 0.95;
+  }
+  .premium-card .product-image {
+    aspect-ratio: 1 / 1;
+    border-radius: 14px;
+    background:
+      radial-gradient(circle at 50% 42%, rgba(255,255,255,0.98) 0%, rgba(255,255,255,0.90) 48%, rgba(244,248,250,0.94) 100%),
+      linear-gradient(135deg, #f7fbfd 0%, #eef6fa 100%);
+    border: 1px solid rgba(14,61,110,0.08);
+    box-shadow: inset 0 0 0 1px rgba(255,255,255,0.85), 0 10px 24px rgba(10,42,77,0.07);
+    margin: 0 0 4px;
+  }
+  .premium-card .product-image::after { display: none; }
+  .premium-card .product-image > img,
+  .premium-card .pi-img-wrap img,
+  .premium-card .slot-img {
+    max-width: 97% !important;
+    max-height: 97% !important;
+    width: auto !important;
+    height: auto !important;
+    object-fit: contain !important;
+    filter: drop-shadow(0 10px 18px rgba(10,42,77,0.16));
+  }
+  .premium-card .product-copy {
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+    min-height: 128px;
+    padding: 2px 2px 0;
+  }
+  .premium-card .product-cat {
+    font-family: 'Cairo', sans-serif;
+    font-size: 13px;
+    letter-spacing: 0.02em;
+    line-height: 1.25;
+    color: #6f7984;
+    text-transform: none;
+    min-height: 32px;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+  .premium-card .product-name {
+    font-family: 'Cairo', sans-serif;
+    font-weight: 800;
+    font-size: 23px;
+    line-height: 1.18;
+    letter-spacing: 0;
+    color: #10233d;
+    min-height: 54px;
+    -webkit-line-clamp: 2;
+  }
+  .premium-card .product-vol {
+    font-family: 'Cairo', sans-serif;
+    font-size: 15px;
+    line-height: 1.25;
+    color: #7A7468;
+    margin-top: 0;
+    min-height: 22px;
+  }
+  .premium-tag-row {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    min-height: 28px;
+    flex-wrap: wrap;
+  }
+  .premium-tag {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 5px 10px;
+    border-radius: 999px;
+    font-family: 'Cairo', sans-serif;
+    font-weight: 800;
+    font-size: 12px;
+    line-height: 1;
+    background: rgba(43,168,74,0.13);
+    color: #167030;
+    border: 1px solid rgba(43,168,74,0.17);
+  }
+  .premium-tag.alt-tag { background: rgba(14,61,110,0.09); color: #0E3D6E; border-color: rgba(14,61,110,0.12); }
+  .premium-price-box {
+    margin-top: auto;
+    border: 1px solid rgba(230,57,70,0.11);
+    background: linear-gradient(180deg, rgba(230,57,70,0.055) 0%, rgba(230,57,70,0.018) 100%);
+    border-radius: 13px 13px 0 0;
+    overflow: hidden;
+  }
+  .premium-card .price-row {
+    margin: 0;
+    padding: 12px 12px 9px;
+    border-top: 0;
+    justify-content: center;
+    align-items: baseline;
+    gap: 9px;
+    text-align: center;
+  }
+  .premium-card .price-new {
+    font-size: 38px;
+    font-weight: 900;
+    letter-spacing: -0.02em;
+    color: #E63946;
+  }
+  .premium-card .price-new .cur {
+    font-size: 16px;
+    color: #B5202C;
+    margin-inline-end: 4px;
+    margin-inline-start: 0;
+    font-weight: 800;
+  }
+  .premium-card .price-old {
+    font-size: 15px;
+    color: #8e8e8e;
+    text-decoration-thickness: 2px;
+  }
+  .premium-card .product-savings {
+    margin: 0;
+    padding: 8px 12px;
+    background: linear-gradient(90deg, rgba(43,168,74,0.09), rgba(43,168,74,0.035));
+    color: #147137;
+    border-top: 1px solid rgba(43,168,74,0.10);
+    font-size: 14px;
+    font-weight: 900;
+    justify-content: center;
+    gap: 6px;
+  }
+  .premium-card .product-savings::before { content: '💵'; font-size: 13px; }
+  .premium-card .product-savings .save-lbl { display: none; }
+  .premium-card .badge {
+    top: 14px;
+    left: 14px;
+    width: auto;
+    min-width: 54px;
+    height: auto;
+    min-height: 54px;
+    padding: 8px 9px;
+    border-radius: 14px;
+    clip-path: none;
+    transform: rotate(-2deg);
+    box-shadow: 0 12px 22px rgba(230,57,70,0.24);
+    z-index: 5;
+  }
+  .premium-card .badge .pct { font-size: 20px; line-height: 0.95; }
+  .premium-card .badge .lbl { font-family: 'Cairo', sans-serif; font-size: 10px; letter-spacing: 0; margin-top: 3px; }
+  .premium-fav {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(255,255,255,0.94);
+    border: 1px solid rgba(14,61,110,0.10);
+    color: #6b7682;
+    font-size: 18px;
+    z-index: 4;
+    box-shadow: 0 8px 18px rgba(10,42,77,0.10);
+  }
+  .grid-4 .premium-card .product-name { font-size: 19px; min-height: 46px; }
+  .grid-4 .premium-card .product-copy { min-height: 118px; }
+  .grid-4 .premium-card .product-cat { font-size: 11px; min-height: 30px; }
+  .grid-4 .premium-card .product-vol { font-size: 13px; min-height: 20px; }
+  .grid-4 .premium-card .price-new { font-size: 31px; }
+  .grid-4 .premium-card .price-new .cur { font-size: 13px; }
+  .grid-4 .premium-card .price-old { font-size: 12px; }
+  .grid-4 .premium-card .product-savings { font-size: 12px; padding: 7px 10px; }
+  .grid-4 .premium-card .premium-tag { font-size: 10px; padding: 5px 8px; }
+  .grid-3 .premium-card .product-name { font-size: 21px; min-height: 50px; }
+  .grid-3 .premium-card .price-new { font-size: 34px; }
+
+  @media (max-width: 700px) {
+    .product-card.premium-card { border-radius: 15px; padding: 12px 12px 0 !important; gap: 8px; }
+    .premium-card .product-image { border-radius: 12px; }
+    .premium-card .product-image > img,
+    .premium-card .pi-img-wrap img,
+    .premium-card .slot-img { max-width: 96% !important; max-height: 96% !important; }
+    .premium-card .product-copy { min-height: 112px; gap: 5px; }
+    .premium-card .product-cat { font-size: 10px !important; min-height: 28px; letter-spacing: 0.04em; }
+    .premium-card .product-name { font-size: 17px !important; min-height: 42px !important; line-height: 1.22; }
+    .premium-card .product-vol { font-size: 12px !important; min-height: 18px; }
+    .premium-card .premium-tag { font-size: 10px; padding: 4px 8px; }
+    .premium-card .price-row { padding: 10px 8px 7px; gap: 7px; }
+    .premium-card .price-new { font-size: 29px !important; }
+    .premium-card .price-new .cur { font-size: 12px !important; }
+    .premium-card .price-old { font-size: 12px !important; }
+    .premium-card .product-savings { font-size: 12px !important; padding: 7px 8px !important; }
+    .premium-card .badge { top: 9px !important; left: 9px !important; min-width: 46px !important; min-height: 46px !important; padding: 6px 7px !important; border-radius: 12px; }
+    .premium-card .badge .pct { font-size: 16px !important; }
+    .premium-card .badge .lbl { font-size: 9px !important; }
+    .premium-fav { top: 10px; right: 10px; width: 30px; height: 30px; font-size: 16px; }
+  }
+
 </style>
 </head>
 <body>
@@ -676,6 +892,18 @@ function productImageBlock(p) {
   return `<img src="${escapeHtml(url)}" alt="${escapeHtml(p.product_name_ar||p.item_code||"")}" class="slot-img" onerror="this.outerHTML='${safePh}'">`;
 }
 
+
+
+function premiumCategoryTag(p) {
+  const raw = String(p.category_ar || p.category_name_ar || p.category || p.category_key || p.section || "").trim().toLowerCase();
+  const name = (p.category_ar || p.category_name_ar || p.category || p.section || "").trim();
+  if (/baby|child|infant|kids|اطفال|أطفال|طفل|حليب/.test(raw)) return "حليب أطفال";
+  if (/diaper|حفاض/.test(raw)) return "حفاضات";
+  if (/vitamin|supplement|فيتامين|مكمل/.test(raw)) return "مكمل غذائي";
+  if (/skin|beauty|care|بشرة|تجميل|عناية/.test(raw)) return "عناية";
+  return name || "عرض خاص";
+}
+
 function setStatus(text, kind) {
   const el = document.getElementById("status-text");
   if (!el) return;
@@ -744,23 +972,28 @@ function renderProductCard(p) {
   const pctText = (p.discount_percent||"").trim() || (p.save_amount?p.save_amount+"%":"");
   const lblText = isCombo ? "مجاناً" : "خصم";
   const hasBadge = pctText?"":" style=\"display:none\"";
+  const tagText = premiumCategoryTag(p);
   return `
-    <div class="product-card">
+    <div class="product-card premium-card">
+      <div class="premium-fav">♡</div>
       <div class="badge ${badgeCls}"${hasBadge}>
         <span class="pct">${escapeHtml(pctText)}</span>
         <span class="lbl">${lblText}</span>
       </div>
       <div class="product-image">${productImageBlock(p)}</div>
-      <div>
+      <div class="product-copy">
+        <div class="premium-tag-row"><span class="premium-tag">${escapeHtml(tagText)}</span></div>
         ${p.product_name_en?`<div class="product-cat">${escapeHtml(p.product_name_en)}</div>`:""}
         <div class="product-name">${escapeHtml(p.product_name_ar||"")}</div>
-        ${p.subtitle||p.description?`<div class="product-vol">${escapeHtml(p.subtitle||p.description||"")}</div>`:""}
+        ${p.subtitle||p.description?`<div class="product-vol">${escapeHtml(p.subtitle||p.description||"")}</div>`:"<div class=\"product-vol\"></div>"}
       </div>
-      <div class="price-row">
-        ${p.old_price?`<span class="price-old">${escapeHtml(p.old_price)} ر.س</span>`:""}
-        ${p.new_price?`<span class="price-new">${escapeHtml(p.new_price)}<span class="cur">ر.س</span></span>`:""}
+      <div class="premium-price-box">
+        <div class="price-row">
+          ${p.new_price?`<span class="price-new"><span class="cur">ر.س</span>${escapeHtml(p.new_price)}</span>`:""}
+          ${p.old_price?`<span class="price-old">${escapeHtml(p.old_price)} ر.س</span>`:""}
+        </div>
+        ${p.save_amount&&String(p.save_amount).trim()!=="0"?`<div class="product-savings"><span>وفر ${escapeHtml(p.save_amount)} ر.س</span><span class="save-lbl">YOU SAVE</span></div>`:""}
       </div>
-      ${p.save_amount&&String(p.save_amount).trim()!=="0"?`<div class="product-savings"><span>وفر ${escapeHtml(p.save_amount)} ر.س</span><span class="save-lbl">YOU SAVE</span></div>`:""}
     </div>`;
 }
 
@@ -1230,18 +1463,168 @@ applyPageScale();
 
 
 /* ================================================================
-   SAFE IMAGE MODE — restored stable rendering
-   - No canvas / CORS color extraction
-   - No duplicated productImageBlock override
-   - Keeps original magazine/card layout intact
+   SMART PRODUCT PHOTO ENGINE
+   - Dynamic gradient background from image dominant color
+   - Smart auto-zoom via natural img sizing
+   - Drop shadow + anti-aliasing
+   - Loading shimmer → fade in
+   - Cache processed results
    ================================================================ */
 
-function heroImageBlock(url, alt) {
-  const src = convertDriveUrl(url || "");
-  if (!src) return PH_HTML;
-  const safePh = PH_HTML.replace(/'/g,"\\'").replace(/"/g,"&quot;");
-  return `<img src="${escapeHtml(src)}" alt="${escapeHtml(alt||"")}" class="slot-img" loading="lazy" decoding="async" onerror="this.outerHTML='${safePh}'">`;
+const IMG_CACHE = new Map();
+
+// Extract dominant color from image via canvas (same-origin or CORS-enabled)
+function extractDominantColor(img) {
+  try {
+    const c = document.createElement("canvas");
+    const size = 40;
+    c.width = c.height = size;
+    const ctx = c.getContext("2d");
+    ctx.drawImage(img, 0, 0, size, size);
+    const data = ctx.getImageData(0, 0, size, size).data;
+    let r=0, g=0, b=0, count=0;
+    for (let i=0; i<data.length; i+=4) {
+      const a = data[i+3];
+      // Skip transparent + near-white + near-black pixels
+      if (a < 30) continue;
+      const R=data[i], G=data[i+1], B=data[i+2];
+      const brightness = (R+G+B)/3;
+      if (brightness > 235 || brightness < 15) continue;
+      r+=R; g+=G; b+=B; count++;
+    }
+    if (!count) return null;
+    return { r: Math.round(r/count), g: Math.round(g/count), b: Math.round(b/count) };
+  } catch(e) {
+    return null; // CORS block — silent fail
+  }
 }
+
+function rgbToHsl(r, g, b) {
+  r/=255; g/=255; b/=255;
+  const max=Math.max(r,g,b), min=Math.min(r,g,b);
+  let h, s, l=(max+min)/2;
+  if (max===min) { h=s=0; } else {
+    const d=max-min;
+    s = l>0.5 ? d/(2-max-min) : d/(max+min);
+    switch(max) {
+      case r: h=((g-b)/d+(g<b?6:0))/6; break;
+      case g: h=((b-r)/d+2)/6; break;
+      default: h=((r-g)/d+4)/6;
+    }
+  }
+  return { h: Math.round(h*360), s: Math.round(s*100), l: Math.round(l*100) };
+}
+
+function buildGradient(col, containerEl) {
+  const { h, s, l } = rgbToHsl(col.r, col.g, col.b);
+  // Muted pastel gradient: light version of color
+  const sLight = Math.min(s, 35);
+  const c1 = `hsl(${h},${sLight}%,${Math.min(l+32,96)}%)`;
+  const c2 = `hsl(${(h+30)%360},${sLight}%,${Math.min(l+20,90)}%)`;
+  const fade = `hsl(${h},${sLight}%,${Math.min(l+28,94)}%,0.5)`;
+  containerEl.style.setProperty("--pi-bg", `linear-gradient(135deg, ${c1} 0%, ${c2} 100%)`);
+  containerEl.style.setProperty("--pi-fade", fade);
+}
+
+function smartProcessImage(containerEl, src, alt) {
+  if (!src) return;
+
+  // Check cache
+  if (IMG_CACHE.has(src)) {
+    const cached = IMG_CACHE.get(src);
+    applySmartImage(containerEl, cached.src, alt, cached.gradient);
+    return;
+  }
+
+  // Show shimmer
+  containerEl.classList.add("pi-loading");
+  containerEl.innerHTML = "";
+
+  const img = new Image();
+  img.crossOrigin = "anonymous"; // try CORS — will fail silently for Drive
+  img.decoding = "async";
+
+  img.onload = function() {
+    containerEl.classList.remove("pi-loading");
+
+    // Try color extraction
+    const col = extractDominantColor(img);
+    let gradApplied = false;
+    if (col) {
+      buildGradient(col, containerEl);
+      gradApplied = true;
+    }
+
+    // Cache result
+    IMG_CACHE.set(src, { src, gradient: gradApplied });
+
+    applySmartImage(containerEl, src, alt, gradApplied);
+  };
+
+  img.onerror = function() {
+    containerEl.classList.remove("pi-loading");
+    containerEl.innerHTML = '<div class="img-placeholder"><div class="ph-icn">!</div><div>Image<br>unavailable</div></div>';
+    console.warn("[PhotoEngine] Failed to load:", src);
+  };
+
+  img.src = src;
+}
+
+function applySmartImage(containerEl, src, alt, hasGradient) {
+  // Wrap img for smart zoom behavior
+  const wrap = document.createElement("div");
+  wrap.className = "pi-img-wrap";
+  const img = document.createElement("img");
+  img.src = src;
+  img.alt = alt || "";
+  img.loading = "lazy";
+  img.decoding = "async";
+  // Fade in
+  img.style.opacity = "0";
+  img.style.transition = "opacity 0.35s ease";
+  img.onload = () => { img.style.opacity = "1"; };
+  img.onerror = () => {
+    containerEl.innerHTML = '<div class="img-placeholder"><div class="ph-icn">!</div><div>Image<br>unavailable</div></div>';
+  };
+  wrap.appendChild(img);
+  containerEl.innerHTML = "";
+  containerEl.appendChild(wrap);
+}
+
+// Override productImageBlock to return a smart container trigger
+function productImageBlock(p) {
+  const url = imageUrlFor(p);
+  const alt = p.product_name_ar || p.item_code || "";
+  const safeAlt = escapeHtml(alt);
+  const safeSrc = escapeHtml(url);
+  if (!url) return '<div class="img-placeholder"><div class="ph-icn">!</div><div>Image<br>unavailable</div></div>';
+  // data attributes — JS picks up after render
+  return `<div class="pi-smart pi-loading" data-src="${safeSrc}" data-alt="${safeAlt}"></div>`;
+}
+
+// Process all .pi-smart containers after DOM renders
+function processAllSmartImages() {
+  document.querySelectorAll(".pi-smart[data-src]").forEach(el => {
+    if (el.dataset.processed) return;
+    el.dataset.processed = "1";
+    const src = el.dataset.src;
+    const alt = el.dataset.alt || "";
+    // Small delay so DOM paint happens first
+    requestIdleCallback
+      ? requestIdleCallback(() => smartProcessImage(el, src, alt), { timeout: 2000 })
+      : setTimeout(() => smartProcessImage(el, src, alt), 80);
+  });
+}
+
+// Hero product also uses smart engine
+function heroImageBlock(url, alt) {
+  if (!url) return '<div class="img-placeholder"><div class="ph-icn">!</div><div>Image<br>unavailable</div></div>';
+  return `<div class="pi-smart pi-loading" data-src="${escapeHtml(url)}" data-alt="${escapeHtml(alt||"")}"></div>`;
+}
+
+// Observe DOM for new .pi-smart nodes (added dynamically)
+const piObserver = new MutationObserver(() => processAllSmartImages());
+piObserver.observe(document.body, { childList: true, subtree: true });
 
 function boot() { wireToolbar(); loadMagazine(); }
 document.addEventListener("DOMContentLoaded", boot);
