@@ -52,7 +52,61 @@
   /* PRODUCT CARD */
   .product-card { background: white; border: 1px solid var(--line); padding: 20px 22px 0; position: relative; display: flex; flex-direction: column; gap: 12px; box-shadow: 0 10px 28px -12px rgba(20,32,31,0.18), 0 2px 6px rgba(20,32,31,0.04); border-radius: 10px; overflow: hidden; min-height: 520px; }
   .product-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 5px; background: var(--sec-accent, var(--teal)); z-index: 1; }
-  .product-image { aspect-ratio: 4 / 3; background: linear-gradient(145deg, #ffffff 60%, #f5f5f5 100%); border: 1px solid var(--line); border-radius: 10px; display: flex; align-items: center; justify-content: center; position: relative; overflow: hidden; margin-bottom: 4px; box-shadow: inset 0 -2px 8px rgba(0,0,0,0.04); }
+  /* ── SMART PRODUCT PHOTO ENGINE ── */
+  .product-image {
+    aspect-ratio: 1 / 1;
+    background: var(--pi-bg, linear-gradient(135deg, #f8f8f8 0%, #efefef 100%));
+    border: none;
+    border-radius: 12px;
+    display: flex; align-items: center; justify-content: center;
+    position: relative; overflow: hidden;
+    margin-bottom: 4px;
+    transition: background 0.4s ease;
+  }
+  /* Loading shimmer */
+  .product-image.pi-loading::after {
+    content: "";
+    position: absolute; inset: 0;
+    background: linear-gradient(90deg,
+      rgba(255,255,255,0) 0%,
+      rgba(255,255,255,0.6) 50%,
+      rgba(255,255,255,0) 100%);
+    background-size: 200% 100%;
+    animation: pi-shimmer 1.2s infinite;
+  }
+  @keyframes pi-shimmer { 0%{background-position:200% 0} 100%{background-position:-200% 0} }
+  /* Smart image inside */
+  .pi-img-wrap {
+    position: absolute; inset: 3%;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .pi-img-wrap img {
+    max-width: 100%; max-height: 100%;
+    width: auto; height: auto;
+    object-fit: contain;
+    display: block;
+    filter: drop-shadow(0 4px 16px rgba(0,0,0,0.13)) drop-shadow(0 1px 4px rgba(0,0,0,0.08));
+    transition: transform 0.25s ease, filter 0.25s ease;
+    image-rendering: -webkit-optimize-contrast;
+    image-rendering: crisp-edges;
+  }
+  .product-image:hover .pi-img-wrap img {
+    transform: scale(1.06);
+    filter: drop-shadow(0 8px 24px rgba(0,0,0,0.18)) drop-shadow(0 2px 6px rgba(0,0,0,0.1));
+  }
+  /* Gradient overlay bottom fade */
+  .product-image::after {
+    content: "";
+    position: absolute; bottom: 0; left: 0; right: 0; height: 22%;
+    background: linear-gradient(to top, var(--pi-fade, rgba(248,248,248,0.5)), transparent);
+    pointer-events: none;
+    z-index: 1;
+  }
+  /* Placeholder */
+  .product-image .img-placeholder {
+    position: absolute; inset: 0;
+    background: repeating-linear-gradient(135deg, var(--cream) 0px, var(--cream) 14px, var(--cream-light) 14px, var(--cream-light) 28px);
+  }
   .product-cat { font-family: 'Roboto Mono', monospace; font-size: 13px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--muted); }
   .product-name { font-family: 'Cairo', sans-serif; font-weight: 600; font-size: 26px; line-height: 1.2; color: var(--ink); min-height: 64px; overflow: hidden; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; }
   .product-vol { font-size: 18px; color: var(--muted); margin-top: 4px; }
@@ -229,8 +283,8 @@
   .page-wrap { width: calc(1240px * var(--page-scale, 1)); height: calc(1754px * var(--page-scale, 1)); overflow: hidden; box-shadow: 0 20px 60px rgba(0,0,0,0.35); background: var(--paper); flex-shrink: 0; }
   .page { width: 1240px; height: 1754px; position: relative; overflow: hidden; transform: scale(var(--page-scale, 1)); transform-origin: top left; background: var(--paper); }
   .slot-img { width: 100%; height: 100%; object-fit: cover; display: block; }
-  .product-image .slot-img { object-fit: contain; padding: 10% 12%; background: #fafafa; filter: drop-shadow(0 4px 12px rgba(0,0,0,0.10)); transition: transform 0.2s ease; }
-  .product-image:hover .slot-img { transform: scale(1.04); }
+  /* slot-img inside product-image handled by .pi-img-wrap */
+  .product-image > .slot-img { object-fit: contain; max-width: 94%; max-height: 94%; width: auto; height: auto; }
   .toc-tile .tt-img .slot-img { object-fit: cover; }
   .cover-hero .image-frame .slot-img { object-fit: cover; }
   .hero-product .hp-img .slot-img { object-fit: contain; padding: 6%; background: white; }
@@ -371,9 +425,9 @@
     /* ── PRODUCT GRIDS mobile ── */
     .grid-4, .grid-3 { grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 0 !important; }
     .grid-4 .product-card, .grid-3 .product-card { padding: 13px 13px 0 !important; gap: 8px; min-height: 0; }
-    /* Bigger square image on mobile */
-    .product-image { aspect-ratio: 1 / 1 !important; border-radius: 8px !important; }
-    .product-image .slot-img { padding: 6% !important; }
+    /* Smart engine on mobile */
+    .product-image { aspect-ratio: 1 / 1 !important; border-radius: 10px !important; }
+    .pi-img-wrap { inset: 4% !important; }
     .product-name { font-size: 18px !important; min-height: 46px !important; -webkit-line-clamp: 2; }
     .product-vol { font-size: 14px !important; }
     .product-cat { font-size: 11px !important; }
@@ -720,10 +774,9 @@ function renderHeroProduct(p, cat) {
   const productUrl = imageUrlFor(p);
   let heroImgHtml;
   if (productUrl) {
-    const safePh = PH_HTML.replace(/'/g,"\\'").replace(/"/g,"&quot;");
-    heroImgHtml = `<img src="${escapeHtml(productUrl)}" alt="${escapeHtml(p.product_name_ar||"")}" class="slot-img" onerror="this.outerHTML='${safePh}'">`;
+    heroImgHtml = heroImageBlock(productUrl, p.product_name_ar||"");
   } else if (cat && cat.hero_image) {
-    heroImgHtml = imgTag(cat.hero_image, p.product_name_ar||"");
+    heroImgHtml = heroImageBlock(cat.hero_image, p.product_name_ar||"");
   } else {
     heroImgHtml = PH_HTML;
   }
@@ -1173,6 +1226,171 @@ function applyPageScale() {
 }
 window.addEventListener("resize", applyPageScale);
 applyPageScale();
+
+
+/* ================================================================
+   SMART PRODUCT PHOTO ENGINE
+   - Dynamic gradient background from image dominant color
+   - Smart auto-zoom via natural img sizing
+   - Drop shadow + anti-aliasing
+   - Loading shimmer → fade in
+   - Cache processed results
+   ================================================================ */
+
+const IMG_CACHE = new Map();
+
+// Extract dominant color from image via canvas (same-origin or CORS-enabled)
+function extractDominantColor(img) {
+  try {
+    const c = document.createElement("canvas");
+    const size = 40;
+    c.width = c.height = size;
+    const ctx = c.getContext("2d");
+    ctx.drawImage(img, 0, 0, size, size);
+    const data = ctx.getImageData(0, 0, size, size).data;
+    let r=0, g=0, b=0, count=0;
+    for (let i=0; i<data.length; i+=4) {
+      const a = data[i+3];
+      // Skip transparent + near-white + near-black pixels
+      if (a < 30) continue;
+      const R=data[i], G=data[i+1], B=data[i+2];
+      const brightness = (R+G+B)/3;
+      if (brightness > 235 || brightness < 15) continue;
+      r+=R; g+=G; b+=B; count++;
+    }
+    if (!count) return null;
+    return { r: Math.round(r/count), g: Math.round(g/count), b: Math.round(b/count) };
+  } catch(e) {
+    return null; // CORS block — silent fail
+  }
+}
+
+function rgbToHsl(r, g, b) {
+  r/=255; g/=255; b/=255;
+  const max=Math.max(r,g,b), min=Math.min(r,g,b);
+  let h, s, l=(max+min)/2;
+  if (max===min) { h=s=0; } else {
+    const d=max-min;
+    s = l>0.5 ? d/(2-max-min) : d/(max+min);
+    switch(max) {
+      case r: h=((g-b)/d+(g<b?6:0))/6; break;
+      case g: h=((b-r)/d+2)/6; break;
+      default: h=((r-g)/d+4)/6;
+    }
+  }
+  return { h: Math.round(h*360), s: Math.round(s*100), l: Math.round(l*100) };
+}
+
+function buildGradient(col, containerEl) {
+  const { h, s, l } = rgbToHsl(col.r, col.g, col.b);
+  // Muted pastel gradient: light version of color
+  const sLight = Math.min(s, 35);
+  const c1 = `hsl(${h},${sLight}%,${Math.min(l+32,96)}%)`;
+  const c2 = `hsl(${(h+30)%360},${sLight}%,${Math.min(l+20,90)}%)`;
+  const fade = `hsl(${h},${sLight}%,${Math.min(l+28,94)}%,0.5)`;
+  containerEl.style.setProperty("--pi-bg", `linear-gradient(135deg, ${c1} 0%, ${c2} 100%)`);
+  containerEl.style.setProperty("--pi-fade", fade);
+}
+
+function smartProcessImage(containerEl, src, alt) {
+  if (!src) return;
+
+  // Check cache
+  if (IMG_CACHE.has(src)) {
+    const cached = IMG_CACHE.get(src);
+    applySmartImage(containerEl, cached.src, alt, cached.gradient);
+    return;
+  }
+
+  // Show shimmer
+  containerEl.classList.add("pi-loading");
+  containerEl.innerHTML = "";
+
+  const img = new Image();
+  img.crossOrigin = "anonymous"; // try CORS — will fail silently for Drive
+  img.decoding = "async";
+
+  img.onload = function() {
+    containerEl.classList.remove("pi-loading");
+
+    // Try color extraction
+    const col = extractDominantColor(img);
+    let gradApplied = false;
+    if (col) {
+      buildGradient(col, containerEl);
+      gradApplied = true;
+    }
+
+    // Cache result
+    IMG_CACHE.set(src, { src, gradient: gradApplied });
+
+    applySmartImage(containerEl, src, alt, gradApplied);
+  };
+
+  img.onerror = function() {
+    containerEl.classList.remove("pi-loading");
+    containerEl.innerHTML = '<div class="img-placeholder"><div class="ph-icn">!</div><div>Image<br>unavailable</div></div>';
+    console.warn("[PhotoEngine] Failed to load:", src);
+  };
+
+  img.src = src;
+}
+
+function applySmartImage(containerEl, src, alt, hasGradient) {
+  // Wrap img for smart zoom behavior
+  const wrap = document.createElement("div");
+  wrap.className = "pi-img-wrap";
+  const img = document.createElement("img");
+  img.src = src;
+  img.alt = alt || "";
+  img.loading = "lazy";
+  img.decoding = "async";
+  // Fade in
+  img.style.opacity = "0";
+  img.style.transition = "opacity 0.35s ease";
+  img.onload = () => { img.style.opacity = "1"; };
+  img.onerror = () => {
+    containerEl.innerHTML = '<div class="img-placeholder"><div class="ph-icn">!</div><div>Image<br>unavailable</div></div>';
+  };
+  wrap.appendChild(img);
+  containerEl.innerHTML = "";
+  containerEl.appendChild(wrap);
+}
+
+// Override productImageBlock to return a smart container trigger
+function productImageBlock(p) {
+  const url = imageUrlFor(p);
+  const alt = p.product_name_ar || p.item_code || "";
+  const safeAlt = escapeHtml(alt);
+  const safeSrc = escapeHtml(url);
+  if (!url) return '<div class="img-placeholder"><div class="ph-icn">!</div><div>Image<br>unavailable</div></div>';
+  // data attributes — JS picks up after render
+  return `<div class="pi-smart pi-loading" data-src="${safeSrc}" data-alt="${safeAlt}"></div>`;
+}
+
+// Process all .pi-smart containers after DOM renders
+function processAllSmartImages() {
+  document.querySelectorAll(".pi-smart[data-src]").forEach(el => {
+    if (el.dataset.processed) return;
+    el.dataset.processed = "1";
+    const src = el.dataset.src;
+    const alt = el.dataset.alt || "";
+    // Small delay so DOM paint happens first
+    requestIdleCallback
+      ? requestIdleCallback(() => smartProcessImage(el, src, alt), { timeout: 2000 })
+      : setTimeout(() => smartProcessImage(el, src, alt), 80);
+  });
+}
+
+// Hero product also uses smart engine
+function heroImageBlock(url, alt) {
+  if (!url) return '<div class="img-placeholder"><div class="ph-icn">!</div><div>Image<br>unavailable</div></div>';
+  return `<div class="pi-smart pi-loading" data-src="${escapeHtml(url)}" data-alt="${escapeHtml(alt||"")}"></div>`;
+}
+
+// Observe DOM for new .pi-smart nodes (added dynamically)
+const piObserver = new MutationObserver(() => processAllSmartImages());
+piObserver.observe(document.body, { childList: true, subtree: true });
 
 function boot() { wireToolbar(); loadMagazine(); }
 document.addEventListener("DOMContentLoaded", boot);
