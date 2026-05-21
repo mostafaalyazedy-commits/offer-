@@ -62,6 +62,8 @@
     position: relative; overflow: hidden;
     margin-bottom: 4px;
     transition: background 0.4s ease;
+    /* ensure it has dimensions so absolute children render */
+    min-height: 60px;
   }
   /* Loading shimmer */
   .product-image.pi-loading::after {
@@ -76,9 +78,16 @@
   }
   @keyframes pi-shimmer { 0%{background-position:200% 0} 100%{background-position:-200% 0} }
   /* Smart image inside */
-  .pi-img-wrap {
-    position: absolute; inset: 3%;
+  /* pi-smart must fill container */
+  .pi-smart {
+    position: absolute; inset: 0;
     display: flex; align-items: center; justify-content: center;
+    width: 100%; height: 100%;
+  }
+  .pi-img-wrap {
+    position: absolute; inset: 4%;
+    display: flex; align-items: center; justify-content: center;
+    width: 92%; height: 92%;
   }
   .pi-img-wrap img {
     max-width: 100%; max-height: 100%;
@@ -87,8 +96,6 @@
     display: block;
     filter: drop-shadow(0 4px 16px rgba(0,0,0,0.13)) drop-shadow(0 1px 4px rgba(0,0,0,0.08));
     transition: transform 0.25s ease, filter 0.25s ease;
-    image-rendering: -webkit-optimize-contrast;
-    image-rendering: crisp-edges;
   }
   .product-image:hover .pi-img-wrap img {
     transform: scale(1.06);
@@ -426,8 +433,10 @@
     .grid-4, .grid-3 { grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 0 !important; }
     .grid-4 .product-card, .grid-3 .product-card { padding: 13px 13px 0 !important; gap: 8px; min-height: 0; }
     /* Smart engine on mobile */
-    .product-image { aspect-ratio: 1 / 1 !important; border-radius: 10px !important; }
-    .pi-img-wrap { inset: 4% !important; }
+    .product-image { aspect-ratio: 1 / 1 !important; border-radius: 10px !important; min-height: 140px !important; }
+    .pi-smart { position: absolute !important; inset: 0 !important; width: 100% !important; height: 100% !important; }
+    .pi-img-wrap { position: absolute !important; inset: 4% !important; width: 92% !important; height: 92% !important; }
+    .pi-img-wrap img { max-width: 100% !important; max-height: 100% !important; width: auto !important; height: auto !important; object-fit: contain !important; }
     .product-name { font-size: 18px !important; min-height: 46px !important; -webkit-line-clamp: 2; }
     .product-vol { font-size: 14px !important; }
     .product-cat { font-size: 11px !important; }
@@ -1312,18 +1321,22 @@ function smartProcessImage(containerEl, src, alt) {
 
   img.onload = function() {
     containerEl.classList.remove("pi-loading");
+    // Ensure container has correct positioning
+    containerEl.style.position = "absolute";
+    containerEl.style.inset = "0";
 
-    // Try color extraction
-    const col = extractDominantColor(img);
+    // Try color extraction — may fail with CORS, that's OK
+    let col = null;
+    try { col = extractDominantColor(img); } catch(e) {}
     let gradApplied = false;
     if (col) {
-      buildGradient(col, containerEl);
+      // Apply gradient to the PARENT .product-image, not the pi-smart div
+      const productImg = containerEl.closest(".product-image");
+      if (productImg) buildGradient(col, productImg);
       gradApplied = true;
     }
 
-    // Cache result
     IMG_CACHE.set(src, { src, gradient: gradApplied });
-
     applySmartImage(containerEl, src, alt, gradApplied);
   };
 
@@ -1337,21 +1350,22 @@ function smartProcessImage(containerEl, src, alt) {
 }
 
 function applySmartImage(containerEl, src, alt, hasGradient) {
-  // Wrap img for smart zoom behavior
   const wrap = document.createElement("div");
   wrap.className = "pi-img-wrap";
+  wrap.style.cssText = "position:absolute;inset:4%;display:flex;align-items:center;justify-content:center;";
+
   const img = document.createElement("img");
   img.src = src;
   img.alt = alt || "";
   img.loading = "lazy";
   img.decoding = "async";
-  // Fade in
-  img.style.opacity = "0";
-  img.style.transition = "opacity 0.35s ease";
+  img.style.cssText = "max-width:100%;max-height:100%;width:auto;height:auto;object-fit:contain;display:block;opacity:0;transition:opacity 0.35s ease;filter:drop-shadow(0 4px 16px rgba(0,0,0,0.13));";
+
   img.onload = () => { img.style.opacity = "1"; };
   img.onerror = () => {
     containerEl.innerHTML = '<div class="img-placeholder"><div class="ph-icn">!</div><div>Image<br>unavailable</div></div>';
   };
+
   wrap.appendChild(img);
   containerEl.innerHTML = "";
   containerEl.appendChild(wrap);
