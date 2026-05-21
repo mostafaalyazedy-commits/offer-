@@ -1,5 +1,6 @@
 <!DOCTYPE html><html lang="ar" dir="rtl"><head>
 <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
 <title>مجلة عروض صيدلية المحيط</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
@@ -252,6 +253,168 @@
     .page-wrap { width: 1240px !important; height: 1754px !important; box-shadow: none !important; page-break-after: always; break-after: page; break-inside: avoid; margin: 0 !important; }
     .page { transform: none !important; width: 1240px !important; height: 1754px !important; }
     .page-wrap:last-child { page-break-after: auto; break-after: auto; }
+  }
+
+  /* ================================================================
+     MOBILE RESPONSIVE — replaces scale trick on small screens
+     ================================================================ */
+  @media (max-width: 700px) {
+    body { background: #f0f0f0; padding-top: 56px; }
+
+    /* TOOLBAR mobile */
+    .toolbar { height: 56px; padding: 0 12px; gap: 8px; flex-wrap: nowrap; overflow-x: auto; }
+    .toolbar .brand { font-size: 15px; margin-inline-end: 4px; }
+    .toolbar .brand .ring { width: 28px; height: 28px; font-size: 14px; }
+    .toolbar .search { min-width: 0; width: 120px; font-size: 13px; padding: 6px 10px; }
+    .toolbar .filter { min-width: 0; width: 100px; font-size: 13px; padding: 6px 8px; }
+    .toolbar .status { display: none; }
+    .toolbar button span:not(.ic) { display: none; }
+    .toolbar button { padding: 8px 10px; min-width: 36px; }
+    .toolbar .divider { display: none; }
+
+    /* MAGAZINE wrapper — no fixed page sizes */
+    .magazine { gap: 0; padding: 0; background: #f0f0f0; }
+
+    /* PAGE WRAP — full width, auto height */
+    .page-wrap {
+      width: 100% !important;
+      height: auto !important;
+      box-shadow: none;
+      margin-bottom: 12px;
+      border-radius: 0;
+    }
+
+    /* PAGE — becomes normal block, no transform */
+    .page {
+      width: 100% !important;
+      height: auto !important;
+      transform: none !important;
+      position: relative;
+      overflow: visible;
+    }
+
+    /* ── COVER mobile ── */
+    .cover {
+      position: relative;
+      padding: 28px 20px 24px;
+      min-height: 100svh;
+    }
+    .cover-top { padding-bottom: 14px; margin-bottom: 10px; }
+    .cover-mast { font-size: 24px; }
+    .cover-mast .ring { width: 40px; height: 40px; font-size: 22px; }
+    .cover-edition { font-size: 11px; }
+    .cover-tagline { font-size: 16px; margin-top: 8px; }
+    .cover-stage {
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+      margin-top: 12px;
+    }
+    .cover-titles { order: 1; }
+    .cover-headline { font-size: 72px; line-height: 0.88; }
+    .cover-hero-wrap { order: 2; height: 260px; margin: 14px 0; }
+    .cover-text { order: 3; gap: 12px; align-items: flex-start; }
+    .cover-sub { font-size: 18px; }
+    .cover-sub strong { font-size: 20px; }
+    .cover-stat-row { gap: 16px; padding-top: 10px; }
+    .cover-stat-row .stat .n { font-size: 26px; }
+    .cover-stat-row .stat .l { font-size: 10px; }
+    .cover-callouts-wrap { order: 4; margin-top: 14px; }
+    .cover-callouts { grid-template-columns: 1fr 1fr; gap: 8px; }
+    .cover-callouts .chip { font-size: 13px; padding: 10px 12px; }
+    .cover-callouts .chip .icn { width: 26px; height: 26px; font-size: 12px; }
+    .cover-foot { margin-top: 16px; padding: 14px 16px; }
+    .cover-foot .dates { font-size: 16px; }
+    .cover-foot .meta { font-size: 11px; }
+    .cover-burst .b2 { font-size: 52px; }
+    .cover-burst .b2 sup { font-size: 22px; }
+    .cover-burst .b1, .cover-burst .b3 { font-size: 11px; }
+    .cover-arc, .cover-arc-2, .cover-dots { display: none; }
+
+    /* ── PAGE HEADER mobile ── */
+    .page-pad {
+      position: relative;
+      inset: auto;
+      padding: 20px 16px 16px;
+      display: block;
+    }
+    .page-head { padding-bottom: 14px; margin-bottom: 14px; flex-wrap: wrap; gap: 8px; }
+    .page-head h1 { font-size: 42px; line-height: 1; margin-top: 4px; }
+    .page-head .cat-mono { font-size: 11px; }
+    .page-head .h-right { display: none; }
+    .page-foot { margin-top: 16px; padding-top: 12px; font-size: 11px; }
+    .page-foot .pn { font-size: 14px; }
+    .section-strip { width: 140px !important; height: 4px; }
+
+    /* ── HERO PRODUCT mobile ── */
+    .hero-product {
+      grid-template-columns: 1fr;
+      height: auto;
+      margin: 0 0 14px;
+      padding: 18px 16px;
+      gap: 14px;
+    }
+    .hero-product .hp-img {
+      aspect-ratio: 16/9;
+      height: auto;
+      width: 100%;
+    }
+    .hero-product .hp-name { font-size: 26px; }
+    .hero-product .hp-new { font-size: 44px; }
+    .hero-product .hp-new .cur { font-size: 18px; }
+    .hero-product .hp-old { font-size: 18px; }
+    .hero-product .hp-desc { font-size: 14px; }
+    .hero-product .hp-badge { width: 80px; height: 80px; top: -12px; right: -10px; }
+    .hero-product .hp-badge .l2 { font-size: 28px; }
+    .hero-product .hp-badge .l1, .hero-product .hp-badge .l3 { font-size: 9px; }
+
+    /* ── PRODUCT GRIDS mobile ── */
+    .grid-4, .grid-3 { grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 0 !important; }
+    .grid-4 .product-card, .grid-3 .product-card { padding: 10px 10px 0 !important; gap: 6px; min-height: 0; }
+    .product-name { font-size: 14px !important; min-height: 36px !important; -webkit-line-clamp: 2; }
+    .product-vol { font-size: 11px !important; }
+    .product-cat { font-size: 9px !important; }
+    .price-new { font-size: 22px !important; }
+    .price-new .cur { font-size: 12px !important; }
+    .price-old { font-size: 12px !important; }
+    .badge { width: 52px !important; height: 52px !important; top: 4px !important; left: 4px !important; }
+    .badge .pct { font-size: 14px !important; }
+    .badge .lbl { font-size: 7px !important; }
+    .product-savings { margin: 0 -10px !important; padding: 5px 10px !important; font-size: 11px !important; }
+    .product-savings .save-lbl { font-size: 9px !important; }
+    .product-card { min-height: 0 !important; border-radius: 8px; }
+
+    /* ── TOC mobile ── */
+    .toc-grid { grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 14px; }
+    .toc-tile { padding: 14px; }
+    .toc-tile .tt-img { min-height: 100px; margin-bottom: 10px; }
+    .toc-tile .tt-title { font-size: 22px; }
+    .toc-tile .tt-cat { font-size: 10px; }
+    .toc-tile .tt-meta .count, .toc-tile .tt-meta .pg { font-size: 13px; }
+    .toc-tile .tt-num { font-size: 11px; top: 10px; left: 10px; }
+
+    /* ── FINAL PAGE mobile ── */
+    .final-page { position: relative; padding: 24px 18px 20px; min-height: 100svh; }
+    .final-page::before { display: none; }
+    .final-title { font-size: 48px; }
+    .final-headline { font-size: 22px; }
+    .final-body { font-size: 15px; }
+    .final-grid { grid-template-columns: 1fr; gap: 16px; margin-top: 16px; }
+    .cta-btn { font-size: 16px; padding: 16px 18px; }
+    .cta-btn .ic { width: 38px; height: 38px; font-size: 18px; }
+    .final-head .brand-row { font-size: 20px; }
+    .final-head .brand-row .ring { width: 34px; height: 34px; font-size: 18px; }
+    .contact-strip { grid-template-columns: repeat(3, 1fr); gap: 10px; }
+    .contact-item .v { font-size: 13px; }
+    .final-foot { flex-direction: column; gap: 10px; align-items: flex-start; }
+    .final-foot .validity { font-size: 14px; padding: 10px 16px; }
+
+    /* ── LOADING / ERROR ── */
+    .loading-page { min-height: 200px; }
+    .loading-card .loading-text { font-size: 20px; }
+    .error-card { padding: 24px 16px; }
+    .error-card .err-title { font-size: 24px; }
+    .error-card .err-msg { font-size: 16px; }
   }
 </style>
 </head>
@@ -997,6 +1160,11 @@ function wireToolbar() {
    ================================================================ */
 
 function applyPageScale() {
+  // On mobile (<=700px) use native responsive layout, no scale trick
+  if (window.innerWidth <= 700) {
+    document.documentElement.style.setProperty("--page-scale", "1");
+    return;
+  }
   const scale = Math.min(1, (window.innerWidth - 48) / 1240);
   document.documentElement.style.setProperty("--page-scale", scale.toFixed(4));
 }
