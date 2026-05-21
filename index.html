@@ -838,14 +838,24 @@ function whatsappLink(num, text) {
   return "https://wa.me/"+n+(text?"?text="+encodeURIComponent(text):"");
 }
 
+function extractDriveId(url) {
+  if (!url) return null;
+  var m1 = url.match(/drive\.google\.com\/file\/d\/([a-zA-Z0-9_\-]+)/);
+  if (m1) return m1[1];
+  var m2 = url.match(/drive\.google\.com\/open\?id=([a-zA-Z0-9_\-]+)/);
+  if (m2) return m2[1];
+  var m3 = url.match(/[?&]id=([a-zA-Z0-9_\-]+)/);
+  if (url.includes("drive.google.com") && m3) return m3[1];
+  var m4 = url.match(/lh3\.googleusercontent\.com\/d\/([a-zA-Z0-9_\-]+)/);
+  if (m4) return m4[1];
+  return null;
+}
+
 function convertDriveUrl(url) {
   if (!url) return url;
-  var m1 = url.match(/drive\.google\.com\/file\/d\/([a-zA-Z0-9_\-]+)/);
-  if (m1) return "https://lh3.googleusercontent.com/d/" + m1[1];
-  var m2 = url.match(/drive\.google\.com\/open\?id=([a-zA-Z0-9_\-]+)/);
-  if (m2) return "https://lh3.googleusercontent.com/d/" + m2[1];
-  var m3 = url.match(/[?&]id=([a-zA-Z0-9_\-]+)/);
-  if (url.includes("drive.google.com") && m3) return "https://lh3.googleusercontent.com/d/" + m3[1];
+  var id = extractDriveId(url);
+  // Use uc?export=view — works on mobile/desktop without CORS/cookie issues
+  if (id) return "https://drive.google.com/uc?export=view&id=" + id;
   return url;
 }
 
@@ -1537,7 +1547,7 @@ function smartProcessImage(containerEl, src, alt) {
   containerEl.innerHTML = "";
 
   const img = new Image();
-  img.crossOrigin = "anonymous"; // try CORS — will fail silently for Drive
+  // No crossOrigin — avoids CORS block on mobile for Drive images
   img.decoding = "async";
 
   img.onload = function() {
@@ -1558,6 +1568,13 @@ function smartProcessImage(containerEl, src, alt) {
   };
 
   img.onerror = function() {
+    // Fallback: try lh3.googleusercontent.com if uc?export=view failed
+    var driveId = extractDriveId(src);
+    if (driveId && !img._triedFallback) {
+      img._triedFallback = true;
+      img.src = "https://lh3.googleusercontent.com/d/" + driveId;
+      return;
+    }
     containerEl.classList.remove("pi-loading");
     containerEl.innerHTML = '<div class="img-placeholder"><div class="ph-icn">!</div><div>Image<br>unavailable</div></div>';
     console.warn("[PhotoEngine] Failed to load:", src);
@@ -1573,13 +1590,20 @@ function applySmartImage(containerEl, src, alt, hasGradient) {
   const img = document.createElement("img");
   img.src = src;
   img.alt = alt || "";
-  img.loading = "lazy";
+  img.loading = "eager";
   img.decoding = "async";
   // Fade in
   img.style.opacity = "0";
   img.style.transition = "opacity 0.35s ease";
   img.onload = () => { img.style.opacity = "1"; };
   img.onerror = () => {
+    // Fallback to lh3 if primary URL failed
+    var driveId = extractDriveId(src);
+    if (driveId && !img._triedFallback) {
+      img._triedFallback = true;
+      img.src = "https://lh3.googleusercontent.com/d/" + driveId;
+      return;
+    }
     containerEl.innerHTML = '<div class="img-placeholder"><div class="ph-icn">!</div><div>Image<br>unavailable</div></div>';
   };
   wrap.appendChild(img);
