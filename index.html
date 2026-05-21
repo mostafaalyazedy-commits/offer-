@@ -974,11 +974,18 @@ function convertDriveUrl(url) {
 const PH_HTML = '<div class="img-placeholder"><div class="ph-icn">!</div><div>Image<br>unavailable</div></div>';
 
 function imgTag(url, alt, cssClass) {
-  const src = convertDriveUrl(url || "");
+  // Avoid double-converting URLs already processed by convertDriveUrl
+  const raw = url || "";
+  const src = raw ? (raw.includes("uc?export=view") || raw.includes("lh3.googleusercontent") ? raw : convertDriveUrl(raw)) : "";
   if (!src) return PH_HTML;
   const safePh = PH_HTML.replace(/'/g,"\\'").replace(/"/g,"&quot;");
   const cls = cssClass || "slot-img";
-  return `<img src="${escapeHtml(src)}" alt="${escapeHtml(alt||"")}" class="${cls}" onerror="this.outerHTML='${safePh}'">`;
+  const driveId = extractDriveId(src);
+  const fallbackSrc = driveId ? "https://lh3.googleusercontent.com/d/" + driveId : "";
+  const onerrorJs = fallbackSrc
+    ? `if(!this._f){this._f=1;this.src='${fallbackSrc}';}else{this.outerHTML='${safePh}';}`
+    : `this.outerHTML='${safePh}';`;
+  return `<img src="${escapeHtml(src)}" alt="${escapeHtml(alt||"")}" class="${cls}" onerror="${onerrorJs}">`;
 }
 
 function toNumber(v) {
