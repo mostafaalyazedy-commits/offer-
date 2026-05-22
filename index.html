@@ -3106,6 +3106,31 @@ body {
   }
 }
 
+
+/* ── TOC CLICK NAVIGATION ── */
+.toc-tile {
+  cursor: pointer !important;
+}
+.toc-tile:focus-visible {
+  outline: 3px solid var(--gold);
+  outline-offset: 3px;
+}
+.toc-tile:active {
+  transform: scale(.97) !important;
+  transition: transform .1s ease !important;
+}
+
+/* scroll-margin so fixed toolbar doesn't hide the heading */
+.page-wrap {
+  scroll-margin-top: 90px;
+}
+@media (max-width: 700px) {
+  .page-wrap { scroll-margin-top: 70px; }
+}
+@media print {
+  .page-wrap { scroll-margin-top: 0; }
+}
+
 </style>
 </head>
 <body>
@@ -3509,8 +3534,9 @@ function renderCategoryPageHtml(cat, products, pageIdx, isFirstOfCat, hasHero, g
   const gridItems = (isFirstOfCat && hasHero) ? products.slice(1) : products;
   const useGrid3  = gridItems.length <= 3;
 
+  const pageSlug = slugifyCategoryName(sectionTitleAr || cat.name_ar || cat.key);
   return `
-    <div class="page-wrap">
+    <div class="page-wrap" id="${pageSlug}">
       <section class="page ${extraCss}" ${sectionStyle}>
         <div class="page-pad">
           <div class="page-head" style="border-bottom-color:color-mix(in srgb, var(--sec-accent) 25%, transparent)">
@@ -3693,8 +3719,13 @@ function renderTocGrid() {
   mount.innerHTML = displayCats.map((cat, i) => {
     const catCount = ALL_PRODUCTS.filter(p => String(p.category||"").trim() === cat.key).length;
     const tocImg = cat.toc_image ? imgTag(cat.toc_image, cat.name_en) : PH_HTML;
+    const slug = slugifyCategoryName(cat.name_ar || cat.key);
     return `
-      <div class="toc-tile">
+      <div class="toc-tile"
+           data-target="${slug}"
+           role="button"
+           tabindex="0"
+           aria-label="انتقل إلى قسم ${escapeHtml(cat.name_ar)}">
         <div class="tt-num">0${i+1}</div>
         <div class="tt-img">${tocImg}</div>
         <div class="tt-cat">${escapeHtml(cat.name_en)}</div>
@@ -3759,7 +3790,8 @@ function populateCategoryFilter() {
    ================================================================ */
 
 function renderErrorPage(msg) {
-  return `<div class="page-wrap"><section class="page loading-page"><div class="error-card">
+  const pageSlug = slugifyCategoryName(sectionTitleAr || cat.name_ar || cat.key);
+  return `<div class="page-wrap" id="${pageSlug}"><section class="page loading-page"><div class="error-card">
     <div class="err-icon">!</div>
     <div class="err-title">تعذّر تحميل العروض</div>
     <div class="err-msg">${escapeHtml(msg)}</div>
@@ -4714,6 +4746,61 @@ function enterpriseBoot() {
 enterpriseBoot();
 
 })(); /* end IIFE */
+
+
+/* ════════════════════════════════════════════════════════════════
+   TOC CLICK NAVIGATION
+   One delegated listener — never duplicated on re-render
+   ════════════════════════════════════════════════════════════════ */
+
+function slugifyCategoryName(name) {
+  return "category-" + String(name || "")
+    .trim()
+    .toLowerCase()
+    .replace(/\s+/g, "-")
+    .replace(/[^\u0600-\u06FFa-z0-9-]/g, "")
+    .replace(/-+/g, "-")
+    .replace(/^-|-$/g, "");
+}
+
+/* Single delegated click handler — registered once at page load */
+document.addEventListener("click", function tocNavHandler(e) {
+  const tile = e.target.closest(".toc-tile[data-target]");
+  if (!tile) return;
+
+  const targetId = tile.dataset.target;
+
+  function scrollToTarget() {
+    const el = document.getElementById(targetId);
+    if (el) {
+      el.scrollIntoView({ behavior: "smooth", block: "start" });
+      return true;
+    }
+    return false;
+  }
+
+  /* Try direct scroll first */
+  if (scrollToTarget()) return;
+
+  /* Target not in DOM — may be filtered out. Reset filter then scroll. */
+  const filterEl = document.getElementById("category-filter");
+  if (filterEl && filterEl.value !== "") {
+    filterEl.value = "";
+    if (window.CURRENT_FILTER) window.CURRENT_FILTER.category = "";
+    filterEl.dispatchEvent(new Event("change"));
+    /* Wait for re-render then scroll */
+    setTimeout(scrollToTarget, 250);
+  }
+});
+
+/* Keyboard support — Enter / Space on toc-tile */
+document.addEventListener("keydown", function tocKeyHandler(e) {
+  if (e.key !== "Enter" && e.key !== " ") return;
+  const tile = e.target.closest(".toc-tile[data-target]");
+  if (!tile) return;
+  e.preventDefault();
+  tile.click();
+});
 
 </script>
 </body></html>
