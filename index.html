@@ -2336,7 +2336,7 @@ body {
     filter: drop-shadow(0 10px 16px rgba(10,42,77,.15)) !important;
   }
   .price-new { font-size: 28px !important; }
-  .badge { animation: badgeShine 3.8s ease-in-out infinite !important; }
+  .badge { animation: none !important; box-shadow: 0 8px 20px rgba(230,57,70,.38), inset 0 1px 0 rgba(255,255,255,.35) !important; }
 }
 
 @media print {
@@ -2461,6 +2461,207 @@ body {
   font-size: .95em !important;
   font-weight: 900 !important;
   color: #fff !important;
+}
+
+
+/* ════════════════════════════════════════════════════════════════════
+   OCEAN PHARMACY — PREMIUM MOTION SYSTEM
+   7 animations · CSS + IntersectionObserver · Zero layout changes
+   ════════════════════════════════════════════════════════════════════ */
+
+/* ──────────────────────────────────────────────────────
+   1. PRODUCT CARD ENTRANCE
+   Cards start invisible; .is-visible triggers entrance
+   ────────────────────────────────────────────────────── */
+.product-card,
+.product-card.premium-card {
+  opacity: 0;
+  transform: translateY(26px) scale(.98);
+  transition:
+    opacity  .55s ease,
+    transform .55s cubic-bezier(.2,.8,.2,1),
+    box-shadow .32s ease,
+    border-color .32s ease !important;
+  will-change: opacity, transform;
+}
+
+.product-card.is-visible,
+.product-card.premium-card.is-visible {
+  opacity: 1 !important;
+  transform: translateY(0) scale(1) !important;
+  will-change: auto;
+}
+
+/* ──────────────────────────────────────────────────────
+   2. BADGE ENTRANCE — pops in after card
+   ────────────────────────────────────────────────────── */
+.badge {
+  opacity: 0;
+  transform: scale(0) rotate(-8deg);
+  transition: none;
+}
+
+.product-card.is-visible .badge {
+  animation: badgeEntrance .5s cubic-bezier(.34,1.56,.64,1) .22s both !important;
+}
+
+@keyframes badgeEntrance {
+  from { opacity: 0; transform: scale(0) rotate(-8deg); }
+  to   { opacity: 1; transform: scale(1) rotate(-2deg); }
+}
+
+/* ──────────────────────────────────────────────────────
+   3. HERO IMAGE FLOAT — gentle infinite loop
+   ────────────────────────────────────────────────────── */
+.hero-product .hp-img img,
+.hero-product .hp-img .slot-img,
+.cover-hero .image-frame img,
+.cover-hero .image-frame .slot-img {
+  animation: heroFloat 4.5s ease-in-out infinite;
+  will-change: transform;
+}
+
+@keyframes heroFloat {
+  0%,100% { transform: translateY(0); }
+  50%      { transform: translateY(-8px); }
+}
+
+/* ──────────────────────────────────────────────────────
+   4. SAVINGS BAR FILL — RTL-aware scaleX reveal
+   ────────────────────────────────────────────────────── */
+.product-savings {
+  position: relative !important;
+  overflow: hidden !important;
+}
+
+/* All direct children sit above the fill layer */
+.product-savings > * {
+  position: relative !important;
+  z-index: 2 !important;
+}
+
+/* The fill overlay — starts collapsed from right (RTL) */
+.product-savings::before {
+  content: "" !important;
+  position: absolute !important;
+  inset: 0 !important;
+  background: inherit !important;
+  transform: scaleX(0) !important;
+  transform-origin: right center !important;
+  z-index: 1 !important;
+  pointer-events: none !important;
+  border-radius: inherit !important;
+}
+
+.product-card.is-visible .product-savings::before {
+  animation: savingsFill .6s cubic-bezier(.2,.8,.2,1) .25s both !important;
+}
+
+@keyframes savingsFill {
+  from { transform: scaleX(0); }
+  to   { transform: scaleX(1); }
+}
+
+/* ──────────────────────────────────────────────────────
+   5. TOC TILES CASCADE — slide in from right (RTL)
+   ────────────────────────────────────────────────────── */
+.toc-tile {
+  opacity: 0;
+  transform: translateX(22px);
+  transition:
+    opacity  .5s ease,
+    transform .5s cubic-bezier(.2,.8,.2,1);
+  will-change: opacity, transform;
+}
+
+.toc-tile.is-visible {
+  opacity: 1 !important;
+  transform: translateX(0) !important;
+  will-change: auto;
+}
+
+/* ──────────────────────────────────────────────────────
+   6. COVER HEADLINE REVEAL — clip-path, Arabic-safe
+   ────────────────────────────────────────────────────── */
+.cover-headline {
+  animation: headlineReveal .9s cubic-bezier(.2,.8,.2,1) .2s both;
+}
+
+@keyframes headlineReveal {
+  from { clip-path: inset(0 100% 0 0); }
+  to   { clip-path: inset(0 0% 0 0);   }
+}
+
+/* Keep visible after animation — never reclip */
+.cover-headline {
+  clip-path: inset(0 0 0 0);
+  overflow: visible !important;
+}
+
+/* ──────────────────────────────────────────────────────
+   7. TOOLBAR HIDE / SHOW — mobile only
+   ────────────────────────────────────────────────────── */
+.toolbar {
+  transition: transform .32s cubic-bezier(.4,0,.2,1) !important;
+  will-change: transform;
+}
+
+@media (max-width: 700px) {
+  .toolbar.toolbar-hidden {
+    transform: translateY(-110%) !important;
+  }
+}
+
+/* ──────────────────────────────────────────────────────
+   ACCESSIBILITY — respect reduced motion
+   ────────────────────────────────────────────────────── */
+@media (prefers-reduced-motion: reduce) {
+  .product-card,
+  .product-card.premium-card,
+  .toc-tile {
+    opacity: 1 !important;
+    transform: none !important;
+    transition: none !important;
+  }
+  .badge {
+    opacity: 1 !important;
+    transform: scale(1) rotate(-2deg) !important;
+    animation: none !important;
+  }
+  .hero-product .hp-img img,
+  .hero-product .hp-img .slot-img,
+  .cover-hero .image-frame img,
+  .cover-hero .image-frame .slot-img {
+    animation: none !important;
+  }
+  .cover-headline {
+    animation: none !important;
+    clip-path: inset(0 0 0 0) !important;
+  }
+  .toolbar { transition: none !important; }
+  * { animation-duration: .01ms !important; transition-duration: .01ms !important; }
+}
+
+/* ──────────────────────────────────────────────────────
+   PRINT — strip all motion
+   ────────────────────────────────────────────────────── */
+@media print {
+  * { animation: none !important; transition: none !important; }
+  .product-card,
+  .product-card.premium-card,
+  .toc-tile {
+    opacity: 1 !important;
+    transform: none !important;
+  }
+  .badge {
+    opacity: 1 !important;
+    transform: scale(1) rotate(-2deg) !important;
+  }
+  .cover-headline {
+    clip-path: none !important;
+    opacity: 1 !important;
+  }
+  .toolbar { transform: none !important; }
 }
 
 </style>
@@ -3462,5 +3663,128 @@ const portraitObserver = new MutationObserver(() => detectPortraitImages());
 document.addEventListener('DOMContentLoaded', () => {
   portraitObserver.observe(document.body, { childList: true, subtree: true });
 });
+
+/* ════════════════════════════════════════════════════════════════════
+   OCEAN PHARMACY — MOTION ENGINE
+   Single IntersectionObserver · No layout thrash · Mobile-safe
+   ════════════════════════════════════════════════════════════════════ */
+(function() {
+  "use strict";
+
+  /* Skip all animations if user prefers reduced motion */
+  const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  if (reducedMotion) {
+    /* Make everything immediately visible */
+    document.querySelectorAll(".product-card,.premium-card,.toc-tile").forEach(el => {
+      el.style.opacity = "1";
+      el.style.transform = "none";
+    });
+    return;
+  }
+
+  /* ── Shared IntersectionObserver for cards + TOC tiles ── */
+  let staggerIndex = 0;
+  const seenRoots = new WeakSet();
+
+  const motionObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (!entry.isIntersecting || seenRoots.has(entry.target)) return;
+      seenRoots.add(entry.target);
+
+      const el = entry.target;
+
+      /* Stagger delay — resets per scroll batch via requestAnimationFrame */
+      const delay = (staggerIndex % 8) * 60;
+      staggerIndex++;
+
+      requestAnimationFrame(() => {
+        el.style.transitionDelay = delay + "ms";
+        el.classList.add("is-visible");
+
+        /* Clean up will-change after animation ends */
+        el.addEventListener("transitionend", () => {
+          el.style.willChange = "auto";
+          el.style.transitionDelay = "";
+        }, { once: true });
+      });
+
+      motionObserver.unobserve(el);
+    });
+  }, {
+    threshold: 0.08,
+    rootMargin: "0px 0px -30px 0px"
+  });
+
+  /* Observe cards + TOC tiles — live + dynamic (MutationObserver) */
+  function observeMotionTargets() {
+    document.querySelectorAll(
+      ".product-card:not(.is-visible), .toc-tile:not(.is-visible)"
+    ).forEach(el => motionObserver.observe(el));
+  }
+
+  /* Re-observe when new cards are injected by rendering logic */
+  const motionMutObs = new MutationObserver(() => {
+    staggerIndex = 0; /* reset stagger for new page batch */
+    observeMotionTargets();
+  });
+
+  /* ── 7. TOOLBAR HIDE / SHOW — mobile only ── */
+  function initToolbarScroll() {
+    if (window.innerWidth > 700) return; /* desktop: skip */
+
+    const toolbar = document.querySelector(".toolbar");
+    if (!toolbar) return;
+
+    let lastY = window.scrollY;
+    let ticking = false;
+    let inputFocused = false;
+
+    /* Never hide while inputs are focused */
+    toolbar.querySelectorAll("input, select").forEach(inp => {
+      inp.addEventListener("focus",  () => { inputFocused = true; });
+      inp.addEventListener("blur",   () => { inputFocused = false; });
+    });
+
+    window.addEventListener("scroll", () => {
+      if (ticking) return;
+      ticking = true;
+      requestAnimationFrame(() => {
+        if (!inputFocused) {
+          const currentY = window.scrollY;
+          const delta = currentY - lastY;
+
+          if (delta > 6 && currentY > 80) {
+            toolbar.classList.add("toolbar-hidden");
+          } else if (delta < -4) {
+            toolbar.classList.remove("toolbar-hidden");
+          }
+          lastY = currentY;
+        }
+        ticking = false;
+      });
+    }, { passive: true });
+  }
+
+  /* ── Boot after DOM ready ── */
+  function bootMotion() {
+    observeMotionTargets();
+
+    motionMutObs.observe(document.body, {
+      childList: true,
+      subtree: true
+    });
+
+    initToolbarScroll();
+  }
+
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", bootMotion);
+  } else {
+    bootMotion();
+  }
+
+})();
+
 </script>
 </body></html>
