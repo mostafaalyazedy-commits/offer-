@@ -2664,6 +2664,448 @@ body {
   .toolbar { transform: none !important; }
 }
 
+
+/* ═══════════════════════════════════════════════════════════════════
+   OCEAN PHARMACY — ENTERPRISE UPGRADE  |  Phase 1-3  |  CSS Only
+   Skeleton · Empty State · Error · Result Count · A11y · Micro UX
+   ═══════════════════════════════════════════════════════════════════ */
+
+/* ──────────────────────────────────────────────────────────────────
+   PHASE 1-A  SKELETON CARDS
+   ────────────────────────────────────────────────────────────────── */
+@keyframes skimmer {
+  0%   { background-position: -400px 0; }
+  100% { background-position:  400px 0; }
+}
+
+.skeleton-card {
+  background: #fff;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  overflow: hidden;
+  padding: 14px 14px 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  min-height: 340px;
+  position: relative;
+}
+
+.skeleton-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 5px;
+  background: linear-gradient(90deg, var(--line) 0%, var(--sand) 50%, var(--line) 100%);
+  background-size: 400px 100%;
+  animation: skimmer 1.6s ease-in-out infinite;
+}
+
+.skel-img {
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  border-radius: 10px;
+  background: linear-gradient(90deg, var(--cream) 25%, #EDE5D0 50%, var(--cream) 75%);
+  background-size: 400px 100%;
+  animation: skimmer 1.6s ease-in-out infinite;
+}
+
+.skel-line {
+  height: 12px;
+  border-radius: 6px;
+  background: linear-gradient(90deg, var(--cream) 25%, #EDE5D0 50%, var(--cream) 75%);
+  background-size: 400px 100%;
+  animation: skimmer 1.6s ease-in-out infinite;
+}
+.skel-line.wide  { width: 80%; }
+.skel-line.mid   { width: 55%; }
+.skel-line.short { width: 35%; }
+.skel-line.price { width: 45%; height: 20px; }
+
+.skel-price-row {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  margin-top: auto;
+  padding-top: 10px;
+  border-top: 1px dashed var(--line);
+  padding-bottom: 10px;
+}
+
+@media (max-width: 700px) {
+  .skeleton-card { min-height: 0; padding: 10px 10px 0; }
+  .skel-line { height: 10px; }
+  .skel-line.price { height: 16px; }
+}
+
+@media print {
+  .skeleton-card { display: none !important; }
+}
+
+/* ──────────────────────────────────────────────────────────────────
+   PHASE 1-B  EMPTY STATE
+   ────────────────────────────────────────────────────────────────── */
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 60px 32px;
+  gap: 16px;
+  font-family: 'Cairo', sans-serif;
+  background: var(--paper);
+  border-radius: 16px;
+  border: 1px dashed var(--sand);
+  margin: 24px 0;
+  min-height: 320px;
+}
+
+.empty-state .es-icon {
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, rgba(14,61,110,.08), rgba(102,217,239,.12));
+  border: 2px solid rgba(14,61,110,.1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 32px;
+}
+
+.empty-state h2 {
+  font-size: 22px;
+  font-weight: 800;
+  color: var(--teal);
+  margin: 0;
+  line-height: 1.3;
+}
+
+.empty-state p {
+  font-size: 16px;
+  color: var(--muted);
+  margin: 0;
+  max-width: 300px;
+  line-height: 1.6;
+}
+
+.empty-state .es-btn {
+  margin-top: 8px;
+  background: var(--teal);
+  color: #fff;
+  border: none;
+  border-radius: 999px;
+  padding: 10px 24px;
+  font-family: 'Cairo', sans-serif;
+  font-size: 15px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background .2s ease, transform .2s ease;
+}
+
+.empty-state .es-btn:hover {
+  background: var(--teal-soft);
+  transform: translateY(-2px);
+}
+
+@media (max-width: 700px) {
+  .empty-state { padding: 40px 20px; min-height: 240px; }
+  .empty-state h2 { font-size: 18px; }
+}
+
+/* ──────────────────────────────────────────────────────────────────
+   PHASE 1-C  ERROR STATE PREMIUM
+   ────────────────────────────────────────────────────────────────── */
+.error-state-premium {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 60px 32px;
+  gap: 16px;
+  font-family: 'Cairo', sans-serif;
+  background: var(--paper);
+  border-radius: 16px;
+  border: 1px solid rgba(230,57,70,.15);
+  margin: 24px 0;
+  min-height: 320px;
+}
+
+.error-state-premium .err-icon {
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, rgba(230,57,70,.1), rgba(230,57,70,.18));
+  border: 2px solid rgba(230,57,70,.2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 32px;
+}
+
+.error-state-premium h2 {
+  font-size: 22px;
+  font-weight: 800;
+  color: var(--coral-deep);
+  margin: 0;
+}
+
+.error-state-premium p {
+  font-size: 16px;
+  color: var(--muted);
+  margin: 0;
+  max-width: 340px;
+  line-height: 1.6;
+}
+
+.error-state-premium .partial-note {
+  font-size: 13px;
+  color: var(--green-deep);
+  background: rgba(43,168,74,.08);
+  border: 1px solid rgba(43,168,74,.15);
+  border-radius: 8px;
+  padding: 8px 16px;
+}
+
+.error-state-premium .retry-btn {
+  background: linear-gradient(135deg, var(--coral), var(--coral-deep));
+  color: #fff;
+  border: none;
+  border-radius: 999px;
+  padding: 12px 28px;
+  font-family: 'Cairo', sans-serif;
+  font-size: 16px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all .25s ease;
+  box-shadow: 0 8px 20px rgba(230,57,70,.28);
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.error-state-premium .retry-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 28px rgba(230,57,70,.38);
+}
+
+.error-state-premium .retry-btn.loading {
+  opacity: .7;
+  pointer-events: none;
+}
+
+/* ──────────────────────────────────────────────────────────────────
+   PHASE 1-D  RESULT COUNT BADGE
+   ────────────────────────────────────────────────────────────────── */
+.result-count {
+  font-family: 'Cairo', sans-serif;
+  font-size: 12px;
+  font-weight: 700;
+  color: rgba(244,236,219,.8);
+  background: rgba(255,255,255,.08);
+  border: 1px solid rgba(255,255,255,.12);
+  border-radius: 999px;
+  padding: 4px 12px;
+  white-space: nowrap;
+  letter-spacing: .02em;
+  transition: all .25s ease;
+}
+
+.result-count.filtered {
+  background: rgba(201,165,103,.2);
+  border-color: rgba(201,165,103,.35);
+  color: var(--gold);
+}
+
+@media (max-width: 700px) {
+  .result-count { font-size: 11px; padding: 3px 9px; }
+}
+
+/* ──────────────────────────────────────────────────────────────────
+   PHASE 2-A  HIGH VALUE / SPOTLIGHT CARDS
+   ────────────────────────────────────────────────────────────────── */
+.product-card.high-value {
+  border-color: rgba(201,165,103,.35) !important;
+  box-shadow:
+    0 1px 2px rgba(10,42,77,.04),
+    0 6px 18px rgba(10,42,77,.09),
+    0 18px 40px rgba(10,42,77,.06),
+    inset 0 0 0 2px rgba(201,165,103,.12),
+    inset 0 1px 0 rgba(255,255,255,.92) !important;
+}
+
+.product-card.spotlight {
+  border-color: rgba(201,165,103,.5) !important;
+}
+
+@keyframes goldBorderPulse {
+  0%, 100% { box-shadow: 0 1px 2px rgba(10,42,77,.04), 0 8px 24px rgba(10,42,77,.1), 0 0 0 2px rgba(201,165,103,.25), inset 0 1px 0 rgba(255,255,255,.92); }
+  50%       { box-shadow: 0 1px 2px rgba(10,42,77,.04), 0 8px 24px rgba(10,42,77,.1), 0 0 0 2px rgba(201,165,103,.55), inset 0 1px 0 rgba(255,255,255,.92); }
+}
+
+.product-card.spotlight {
+  animation: goldBorderPulse 3s ease-in-out infinite !important;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .product-card.spotlight { animation: none !important; }
+}
+
+@media print {
+  .product-card.high-value,
+  .product-card.spotlight { box-shadow: 0 1px 4px rgba(0,0,0,.08) !important; animation: none !important; }
+}
+
+.high-value-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 3px 10px;
+  border-radius: 999px;
+  background: linear-gradient(135deg, rgba(201,165,103,.18), rgba(255,209,102,.14));
+  border: 1px solid rgba(201,165,103,.25);
+  color: #7a5218;
+  font-family: 'Cairo', sans-serif;
+  font-size: 11px;
+  font-weight: 800;
+  margin-top: 3px;
+}
+
+.high-value-tag::before { content: '✦'; font-size: 9px; color: var(--gold); }
+
+/* ──────────────────────────────────────────────────────────────────
+   PHASE 2-B  SAVINGS BAR PULSE (CSS only, 2 pulses)
+   ────────────────────────────────────────────────────────────────── */
+@keyframes savingsPulse {
+  0%  { box-shadow: 0 0 0 0 rgba(43,168,74,.4); }
+  40% { box-shadow: 0 0 0 6px rgba(43,168,74,.0); }
+  70% { box-shadow: 0 0 0 0 rgba(43,168,74,.3); }
+  90% { box-shadow: 0 0 0 5px rgba(43,168,74,.0); }
+  100%{ box-shadow: 0 0 0 0 rgba(43,168,74,.0); }
+}
+
+.product-card.is-visible .product-savings {
+  animation: savingsPulse .9s ease-out .5s both !important;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .product-card.is-visible .product-savings { animation: none !important; }
+}
+
+/* ──────────────────────────────────────────────────────────────────
+   PHASE 2-C  SECTION TRANSITION (light fade — no 3D, no flip)
+   ────────────────────────────────────────────────────────────────── */
+.page-leaving {
+  opacity: 1;
+  transform: translateY(0);
+  transition: opacity .18s ease, transform .18s ease;
+}
+
+.page-leaving.out {
+  opacity: 0;
+  transform: translateY(-8px);
+}
+
+.page-entering {
+  opacity: 0;
+  transform: translateY(10px);
+}
+
+.page-entering.in {
+  opacity: 1;
+  transform: translateY(0);
+  transition: opacity .28s ease .02s, transform .28s cubic-bezier(.2,.8,.2,1) .02s;
+}
+
+/* ──────────────────────────────────────────────────────────────────
+   PHASE 3-A  MOBILE TAP FEEDBACK (CSS only)
+   ────────────────────────────────────────────────────────────────── */
+@media (hover: none) and (pointer: coarse) {
+  .product-card:active {
+    transform: scale(.985) !important;
+    filter: brightness(.97) !important;
+    transition: transform .08s ease, filter .08s ease !important;
+  }
+}
+
+/* ──────────────────────────────────────────────────────────────────
+   PHASE 3-B  DESKTOP SECTION NAV DOTS
+   ────────────────────────────────────────────────────────────────── */
+.section-nav {
+  position: fixed;
+  left: 18px;
+  top: 50%;
+  transform: translateY(-50%);
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  z-index: 999;
+}
+
+@media (max-width: 900px) {
+  .section-nav { display: none !important; }
+}
+
+.section-nav-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: rgba(201,165,103,.35);
+  border: 1px solid rgba(201,165,103,.5);
+  cursor: pointer;
+  transition: all .25s ease;
+  position: relative;
+}
+
+.section-nav-dot.active {
+  background: var(--gold);
+  box-shadow: 0 0 0 3px rgba(201,165,103,.2);
+  transform: scale(1.3);
+}
+
+.section-nav-dot[title]:hover::after {
+  content: attr(title);
+  position: absolute;
+  left: 16px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: var(--teal-deep);
+  color: var(--cream-light);
+  font-family: 'Cairo', sans-serif;
+  font-size: 12px;
+  font-weight: 700;
+  padding: 4px 10px;
+  border-radius: 6px;
+  white-space: nowrap;
+  pointer-events: none;
+  box-shadow: 0 4px 12px rgba(0,0,0,.2);
+}
+
+@media print {
+  .section-nav { display: none !important; }
+}
+
+/* ──────────────────────────────────────────────────────────────────
+   ACCESSIBILITY — focus-visible ring
+   ────────────────────────────────────────────────────────────────── */
+.toolbar button:focus-visible,
+.empty-state .es-btn:focus-visible,
+.error-state-premium .retry-btn:focus-visible {
+  outline: 3px solid var(--gold);
+  outline-offset: 2px;
+}
+
+/* ──────────────────────────────────────────────────────────────────
+   HERO FLOAT — safety: only hero, never cards, media-gated
+   ────────────────────────────────────────────────────────────────── */
+@media (max-width: 700px) {
+  .hero-product .hp-img img,
+  .hero-product .hp-img .slot-img {
+    animation-play-state: paused !important;
+  }
+}
+
 </style>
 </head>
 <body>
@@ -2797,6 +3239,12 @@ let CATEGORY_DATA = {};   // keyed by category_key (raw from sheet)
 let ALL_PRODUCTS  = [];
 let ORDERED_CATS  = [];   // array of category objects sorted by order
 let CURRENT_FILTER = { search: "", category: "" };
+
+/* Expose runtime state for enterprise patch scripts (top-level let is not window.*) */
+window.CATEGORY_DATA = CATEGORY_DATA;
+window.ALL_PRODUCTS = ALL_PRODUCTS;
+window.ORDERED_CATS = ORDERED_CATS;
+window.CURRENT_FILTER = CURRENT_FILTER;
 
 /* ================================================================
    HELPERS
@@ -2940,11 +3388,15 @@ async function loadCategoryData() {
       list.push(entry);
     });
     ORDERED_CATS = list.sort((a,b) => a.order - b.order);
+    window.CATEGORY_DATA = CATEGORY_DATA;
+    window.ORDERED_CATS = ORDERED_CATS;
     console.log("Categories loaded:", ORDERED_CATS.length);
   } catch(err) {
     console.warn("Categories API failed, using empty fallback:", err.message);
     CATEGORY_DATA = {};
     ORDERED_CATS = [];
+    window.CATEGORY_DATA = CATEGORY_DATA;
+    window.ORDERED_CATS = ORDERED_CATS;
   }
 }
 
@@ -2971,7 +3423,7 @@ function renderProductCard(p) {
         <span class="pct">${escapeHtml(pctText)}</span>
         <span class="lbl">${lblText}</span>
       </div>
-      <div class="product-image">${productImageBlock(p)}</div>
+      <div class="product-image">${(window.imageWithPriority ? window.imageWithPriority(productImageBlock(p)) : productImageBlock(p))}</div>
       <div class="product-copy">
         <div class="premium-tag-row"><span class="premium-tag">${escapeHtml(tagText)}</span></div>
         ${p.product_name_en?`<div class="product-cat">${escapeHtml(p.product_name_en)}</div>`:""}
@@ -3119,7 +3571,21 @@ function renderCategoriesMount() {
   const filtered = getFilteredProducts();
 
   if (!filtered.length) {
-    mount.innerHTML = renderErrorPage("لم يتم العثور على أي منتج يطابق البحث الحالي.");
+    if (ALL_PRODUCTS.length > 0) {
+      /* Has products but filter/search returned zero → empty state */
+      mount.innerHTML = `<div class="page-wrap"><section class="page" style="position:relative;overflow:visible;height:auto;transform:none;width:100%">
+        <div class="page-pad" style="position:relative;inset:auto;padding:20px 16px 40px">
+          <div class="empty-state" role="status" aria-live="polite">
+            <div class="es-icon" aria-hidden="true">🔍</div>
+            <h2>لا توجد منتجات مطابقة</h2>
+            <p>لم يتم العثور على منتجات تطابق بحثك. جرّب كلمة أخرى أو تصفح الأقسام.</p>
+            <button class="es-btn" onclick="clearMagSearch()" aria-label="مسح البحث والعودة للكل">مسح البحث ↩</button>
+          </div>
+        </div>
+      </section></div>`;
+    } else {
+      mount.innerHTML = renderErrorPage("لم يتم العثور على أي منتج يطابق البحث الحالي.");
+    }
     return;
   }
 
@@ -3370,9 +3836,22 @@ async function loadMagazine() {
   const finalMount = document.getElementById("final-page-mount");
   if (!mount) return;
 
-  mount.innerHTML = `<div class="page-wrap"><section class="page loading-page"><div class="loading-card">
-    <div class="spinner"></div><div class="loading-text">جاري تحميل العروض...</div>
-  </div></section></div>`;
+  /* Enterprise: skeleton cards instead of bare spinner */
+  (function buildSkeleton() {
+    function skelCard() {
+      return '<div class="product-card skeleton-card" aria-hidden="true">' +
+        '<div class="skel-img"></div>' +
+        '<div class="skel-line wide"></div>' +
+        '<div class="skel-line mid"></div>' +
+        '<div class="skel-line short"></div>' +
+        '<div class="skel-price-row"><div class="skel-line price" style="flex:1"></div>' +
+        '<div class="skel-line mid"></div></div></div>';
+    }
+    var cards = Array.from({length:8}, skelCard).join("");
+    mount.innerHTML = '<div class="page-wrap"><section class="page" style="position:relative;overflow:visible;height:auto;transform:none;width:100%">' +
+      '<div class="page-pad" style="position:relative;inset:auto;padding:20px 16px 16px;">' +
+      '<div class="grid-4" role="status" aria-busy="true" aria-label="جاري تحميل المنتجات">' + cards + '</div></div></section></div>';
+  })();
   setStatus("جاري التحميل…","");
 
   // Load categories + products in parallel
@@ -3404,6 +3883,7 @@ async function loadMagazine() {
   }
 
   ALL_PRODUCTS = products;
+  window.ALL_PRODUCTS = ALL_PRODUCTS;
 
   // Build TOC and filter from categories
   renderTocGrid();
@@ -3785,6 +4265,446 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
 })();
+
+
+/* ═══════════════════════════════════════════════════════════════════
+   OCEAN PHARMACY — ENTERPRISE ENGINE  |  Phase 1-3  |  Vanilla JS
+   Skeleton · Empty · Error · A11y · Badge Counter · Section Nav
+   ═══════════════════════════════════════════════════════════════════ */
+(function() {
+"use strict";
+
+/* ── Shared image priority counter ────────────────────────── */
+let _imgPriorityIdx = 0;
+
+/* ══════════════════════════════════════════════════════════════
+   PHASE 1-A  SKELETON CARDS
+   ══════════════════════════════════════════════════════════════ */
+function skeletonCard() {
+  return `<div class="product-card skeleton-card" aria-hidden="true">
+    <div class="skel-img"></div>
+    <div class="skel-line wide"></div>
+    <div class="skel-line mid"></div>
+    <div class="skel-line short"></div>
+    <div class="skel-price-row">
+      <div class="skel-line price" style="flex:1"></div>
+      <div class="skel-line mid"></div>
+    </div>
+  </div>`;
+}
+
+function renderSkeletonPage(count) {
+  const cards = Array.from({length: count}, skeletonCard).join("");
+  return `<div class="page-wrap"><section class="page" style="position:relative;overflow:visible;height:auto;transform:none;width:100%">
+    <div class="page-pad" style="position:relative;inset:auto;padding:20px 16px 16px;">
+      <div class="grid-4" role="status" aria-busy="true" aria-label="جاري تحميل المنتجات">${cards}</div>
+    </div>
+  </section></div>`;
+}
+
+/* ══════════════════════════════════════════════════════════════
+   PHASE 1-B  IMAGE PRIORITY INJECTION
+   Wraps existing productImageBlock — patches output only
+   ══════════════════════════════════════════════════════════════ */
+const _origProductImageBlock = window.productImageBlock || null;
+
+function imageWithPriority(html) {
+  if (!html || !html.includes('<img ')) return html;
+  const eager = _imgPriorityIdx < 4;
+  _imgPriorityIdx++;
+  if (eager) {
+    return html
+      .replace('<img ', '<img loading="eager" fetchpriority="high" decoding="async" ')
+      .replace(/loading="lazy"/g, 'loading="eager"');
+  } else {
+    return html
+      .replace('<img ', '<img loading="lazy" fetchpriority="auto" decoding="async" ');
+  }
+}
+
+/* Make the priority helper available to the original global renderProductCard() */
+window.imageWithPriority = imageWithPriority;
+
+/* ══════════════════════════════════════════════════════════════
+   PHASE 1-C  PREMIUM EMPTY STATE HTML
+   ══════════════════════════════════════════════════════════════ */
+function renderEmptyState() {
+  return `<div class="page-wrap"><section class="page" style="position:relative;overflow:visible;height:auto;transform:none;width:100%">
+    <div class="page-pad" style="position:relative;inset:auto;padding:20px 16px 40px">
+      <div class="empty-state" role="status" aria-live="polite">
+        <div class="es-icon" aria-hidden="true">🔍</div>
+        <h2>لا توجد منتجات مطابقة</h2>
+        <p>لم يتم العثور على منتجات تطابق بحثك الحالي. جرّب كلمة أخرى أو تصفح الأقسام.</p>
+        <button class="es-btn" onclick="clearMagSearch()" aria-label="مسح البحث والعودة للكل">مسح البحث ↩</button>
+      </div>
+    </div>
+  </section></div>`;
+}
+
+/* Global clear function — called by empty state button */
+window.clearMagSearch = function() {
+  const s = document.getElementById("search-input");
+  const f = document.getElementById("category-filter");
+  if (s) { s.value = ""; }
+  if (f) { f.value = ""; }
+  if (window.CURRENT_FILTER) { window.CURRENT_FILTER.search = ""; window.CURRENT_FILTER.category = ""; }
+  if (typeof renderCategoriesMount === "function") renderCategoriesMount();
+};
+
+/* ══════════════════════════════════════════════════════════════
+   PHASE 1-D  PREMIUM ERROR STATE HTML
+   ══════════════════════════════════════════════════════════════ */
+function renderErrorStatePremium(msg, partial) {
+  const partialNote = partial
+    ? `<p class="partial-note">✓ تم تحميل ${partial} منتج جزئياً</p>` : "";
+  return `<div class="page-wrap"><section class="page" style="position:relative;overflow:visible;height:auto;transform:none;width:100%">
+    <div class="page-pad" style="position:relative;inset:auto;padding:20px 16px 40px">
+      <div class="error-state-premium" role="alert" aria-live="assertive">
+        <div class="err-icon" aria-hidden="true">⚠️</div>
+        <h2>تعذر تحميل العروض</h2>
+        <p>${msg || "حدث خطأ أثناء تحميل بيانات المجلة. تحقق من الاتصال ثم حاول مرة أخرى."}</p>
+        ${partialNote}
+        <button class="retry-btn" onclick="retryLoad(this)" aria-label="إعادة محاولة تحميل المجلة">
+          <span class="retry-ic">⟳</span> إعادة المحاولة
+        </button>
+      </div>
+    </div>
+  </section></div>`;
+}
+
+window.retryLoad = function(btn) {
+  if (btn) { btn.classList.add("loading"); btn.textContent = "جاري التحميل…"; }
+  _imgPriorityIdx = 0; /* reset priority counter */
+  if (typeof loadMagazine === "function") loadMagazine();
+};
+
+/* ══════════════════════════════════════════════════════════════
+   PHASE 1-E  RESULT COUNT BADGE
+   ══════════════════════════════════════════════════════════════ */
+function upsertResultCount() {
+  const toolbar = document.getElementById("toolbar");
+  if (!toolbar) return;
+
+  let badge = document.getElementById("result-count-badge");
+  if (!badge) {
+    badge = document.createElement("span");
+    badge.id = "result-count-badge";
+    badge.className = "result-count";
+    badge.setAttribute("aria-live", "polite");
+    badge.setAttribute("aria-label", "عدد المنتجات المعروضة");
+    /* Insert before the first button in toolbar */
+    const firstBtn = toolbar.querySelector("button");
+    toolbar.insertBefore(badge, firstBtn);
+  }
+
+  const total    = (window.ALL_PRODUCTS || []).length;
+  const filter   = window.CURRENT_FILTER || {};
+  const q        = (filter.search || "").trim();
+  const cat      = filter.category || "";
+  const filtered = (window.ALL_PRODUCTS || []).filter(p => {
+    if (cat && String(p.category || "").trim().toLowerCase() !== cat) return false;
+    if (q) {
+      const hay = ((p.product_name_ar || "") + " " + (p.product_name_en || "") + " " + (p.category || "")).toLowerCase();
+      return hay.includes(q.toLowerCase());
+    }
+    return true;
+  }).length;
+
+  const isFiltered = !!(q || cat);
+  badge.className = "result-count" + (isFiltered ? " filtered" : "");
+  badge.textContent = isFiltered
+    ? `عُرض ${filtered} من ${total} منتج`
+    : `${total} منتج`;
+}
+
+/* ══════════════════════════════════════════════════════════════
+   PHASE 1-F  ACCESSIBILITY ATTRIBUTES
+   ══════════════════════════════════════════════════════════════ */
+function injectA11y() {
+  const toolbar = document.getElementById("toolbar");
+  if (toolbar && !toolbar.hasAttribute("role")) {
+    toolbar.setAttribute("role", "toolbar");
+    toolbar.setAttribute("aria-label", "أدوات المجلة");
+  }
+
+  const search = document.getElementById("search-input");
+  if (search) {
+    search.setAttribute("aria-label", "ابحث عن منتج");
+    search.setAttribute("role", "searchbox");
+  }
+
+  const filter = document.getElementById("category-filter");
+  if (filter) filter.setAttribute("aria-label", "تصفية حسب القسم");
+
+  const refreshBtn = document.getElementById("refresh-btn");
+  if (refreshBtn) refreshBtn.setAttribute("aria-label", "تحديث العروض");
+
+  const printBtn = document.getElementById("print-btn");
+  if (printBtn) printBtn.setAttribute("aria-label", "تحميل المجلة كـ PDF");
+
+  const magazine = document.getElementById("magazine");
+  if (magazine) {
+    magazine.setAttribute("role", "main");
+    magazine.setAttribute("aria-label", "مجلة عروض صيدلية أوشن");
+  }
+}
+
+function setMagazineBusy(busy) {
+  const magazine = document.getElementById("magazine");
+  if (magazine) magazine.setAttribute("aria-busy", busy ? "true" : "false");
+}
+
+/* Inject ARIA onto dynamically rendered cards */
+function injectCardA11y() {
+  document.querySelectorAll(".product-card:not([role])").forEach(card => {
+    card.setAttribute("role", "article");
+    const name = card.querySelector(".product-name");
+    if (name) card.setAttribute("aria-label", name.textContent.trim());
+
+    const badge = card.querySelector(".badge");
+    if (badge && !badge.hasAttribute("role")) {
+      const pct = badge.querySelector(".pct");
+      if (pct) {
+        badge.setAttribute("role", "img");
+        badge.setAttribute("aria-label", pct.textContent.trim() + " خصم");
+      }
+    }
+
+    const savings = card.querySelector(".product-savings");
+    if (savings && !savings.hasAttribute("aria-label")) {
+      const txt = savings.querySelector("span:first-child");
+      if (txt) savings.setAttribute("aria-label", txt.textContent.trim());
+    }
+
+    const priceRow = card.querySelector(".price-row");
+    if (priceRow && !priceRow.hasAttribute("aria-live")) {
+      priceRow.setAttribute("aria-live", "polite");
+    }
+  });
+}
+
+/* ══════════════════════════════════════════════════════════════
+   PHASE 2-A  DISCOUNT BADGE COUNTER
+   Animates the percentage number on badge entrance
+   ══════════════════════════════════════════════════════════════ */
+function animateBadgeCounter(badge) {
+  if (!badge || badge.dataset.counted === "true") return;
+  const pctEl = badge.querySelector(".pct");
+  if (!pctEl) return;
+
+  const raw = pctEl.textContent.trim();
+  /* Only animate pure numeric percentages like "25%" or "30" */
+  const match = raw.match(/^(\d+)(%?)$/);
+  if (!match) return;
+
+  const target = parseInt(match[1], 10);
+  const suffix = match[2] || "";
+  if (isNaN(target) || target <= 0) return;
+
+  badge.dataset.counted = "true";
+  const start = performance.now();
+  const dur = 600;
+
+  function easeOut(t) { return 1 - Math.pow(1 - t, 3); }
+
+  function tick(now) {
+    const elapsed = now - start;
+    const progress = Math.min(elapsed / dur, 1);
+    const current = Math.round(easeOut(progress) * target);
+    pctEl.textContent = current + suffix;
+    if (progress < 1) requestAnimationFrame(tick);
+  }
+
+  requestAnimationFrame(tick);
+}
+
+/* ══════════════════════════════════════════════════════════════
+   PHASE 2-B  HIGH-VALUE / SPOTLIGHT CLASS INJECTION
+   Called after renderCategoriesMount renders cards
+   ══════════════════════════════════════════════════════════════ */
+function injectValueClasses() {
+  document.querySelectorAll(".product-card:not([data-value-checked])").forEach(card => {
+    card.dataset.valueChecked = "1";
+    const badge = card.querySelector(".badge .pct");
+    if (!badge) return;
+    const pct = parseInt(badge.textContent, 10);
+    if (isNaN(pct)) return;
+    if (pct >= 30) {
+      card.classList.add("high-value");
+      /* Add value pill after premium-tag if not already there */
+      const tagRow = card.querySelector(".premium-tag-row");
+      if (tagRow && !tagRow.querySelector(".high-value-tag")) {
+        const pill = document.createElement("span");
+        pill.className = "high-value-tag";
+        pill.textContent = "قيمة ممتازة";
+        tagRow.appendChild(pill);
+      }
+    }
+    if (pct >= 40) {
+      card.classList.add("spotlight");
+    }
+  });
+}
+
+/* ══════════════════════════════════════════════════════════════
+   PHASE 2-C  LIGHT SECTION TRANSITION on filter/search change
+   ══════════════════════════════════════════════════════════════ */
+let _sectionTransitioning = false;
+
+function wrapRenderWithTransition(originalFn) {
+  return function() {
+    if (_sectionTransitioning || !window.ALL_PRODUCTS || !window.ALL_PRODUCTS.length) {
+      return originalFn.apply(this, arguments);
+    }
+    const mount = document.getElementById("categories-mount");
+    if (!mount || !mount.children.length) return originalFn.apply(this, arguments);
+
+    _sectionTransitioning = true;
+    mount.classList.add("page-leaving");
+    requestAnimationFrame(() => mount.classList.add("out"));
+
+    setTimeout(() => {
+      originalFn.apply(this, arguments);
+      mount.classList.remove("page-leaving", "out");
+      mount.classList.add("page-entering");
+      requestAnimationFrame(() => {
+        requestAnimationFrame(() => mount.classList.add("in"));
+      });
+      setTimeout(() => {
+        mount.classList.remove("page-entering", "in");
+        _sectionTransitioning = false;
+      }, 350);
+    }, 200);
+  };
+}
+
+/* ══════════════════════════════════════════════════════════════
+   PHASE 3-A  DESKTOP SECTION NAVIGATION DOTS
+   ══════════════════════════════════════════════════════════════ */
+function initSectionNav() {
+  if (window.innerWidth <= 900) return;
+
+  let nav = document.getElementById("section-nav");
+  if (!nav) {
+    nav = document.createElement("nav");
+    nav.id = "section-nav";
+    nav.className = "section-nav";
+    nav.setAttribute("aria-label", "التنقل بين أقسام المجلة");
+    document.body.appendChild(nav);
+  }
+  nav.innerHTML = "";
+
+  const pages = document.querySelectorAll(".page-wrap");
+  if (pages.length < 2) return;
+
+  pages.forEach((wrap, i) => {
+    const headEl  = wrap.querySelector(".page-head h1, .cover-mast, .final-title");
+    const label   = headEl ? headEl.textContent.trim().slice(0, 12) : `صفحة ${i + 1}`;
+    const dot     = document.createElement("button");
+    dot.className = "section-nav-dot";
+    dot.title     = label;
+    dot.setAttribute("aria-label", `الانتقال إلى: ${label}`);
+    dot.addEventListener("click", () => wrap.scrollIntoView({ behavior: "smooth", block: "start" }));
+    nav.appendChild(dot);
+  });
+
+  /* Activate dot on scroll */
+  const navDots = nav.querySelectorAll(".section-nav-dot");
+  const sectionObserver = new IntersectionObserver(entries => {
+    entries.forEach(entry => {
+      if (!entry.isIntersecting) return;
+      const idx = Array.from(pages).indexOf(entry.target);
+      navDots.forEach((d, i) => d.classList.toggle("active", i === idx));
+    });
+  }, { threshold: 0.4 });
+
+  pages.forEach(p => sectionObserver.observe(p));
+}
+
+/* ══════════════════════════════════════════════════════════════
+   OBSERVER — runs after cards are rendered
+   Single MutationObserver for all post-render tasks
+   ══════════════════════════════════════════════════════════════ */
+const _postRenderObs = new MutationObserver(() => {
+  const mount = document.getElementById("categories-mount");
+
+  /* Empty state: real products loaded but filter shows zero */
+  if (mount && window.ALL_PRODUCTS && window.ALL_PRODUCTS.length > 0) {
+    const hasRealCards = mount.querySelector(".product-card:not(.skeleton-card)");
+    const hasPageWrap  = mount.querySelector(".page-wrap");
+    /* If mount has content but no real cards and no page-wrap = empty result */
+    if (hasPageWrap && !hasRealCards && !mount.querySelector(".empty-state") && !mount.querySelector(".error-state-premium")) {
+      mount.innerHTML = renderEmptyState();
+    }
+  }
+
+  injectCardA11y();
+  injectValueClasses();
+  upsertResultCount();
+  /* Animate badge counters for newly visible cards */
+  document.querySelectorAll(".product-card.is-visible .badge:not([data-counted])").forEach(animateBadgeCounter);
+  /* Build/rebuild section nav after DOM changes */
+  if (window.innerWidth > 900) {
+    clearTimeout(window._navRebuildTimer);
+    window._navRebuildTimer = setTimeout(initSectionNav, 400);
+  }
+  /* Reset image priority counter when new batch renders */
+  _imgPriorityIdx = 0;
+});
+
+/* Also listen for is-visible additions to trigger badge counter */
+const _visibilityObs = new MutationObserver(mutations => {
+  mutations.forEach(m => {
+    if (m.type === "attributes" && m.attributeName === "class") {
+      const el = m.target;
+      if (el.classList.contains("is-visible")) {
+        const badge = el.querySelector(".badge");
+        if (badge) setTimeout(() => animateBadgeCounter(badge), 220);
+      }
+    }
+  });
+});
+
+/* ══════════════════════════════════════════════════════════════
+   BOOT — patch existing functions then start observers
+   ══════════════════════════════════════════════════════════════ */
+function enterpriseBoot() {
+  injectA11y();
+  setMagazineBusy(true);
+
+  /* Single safe patch — intercepts AFTER render to inject empty state + count */
+  /* Uses MutationObserver on mount instead of wrapping the function */
+  /* This avoids any risk of breaking the render chain */
+
+  /* Skeleton is now injected directly inside loadMagazine — no wrap needed */
+  _imgPriorityIdx = 0;
+
+  /* Start MutationObserver on categories-mount */
+  const mount = document.getElementById("categories-mount");
+  if (mount) {
+    _postRenderObs.observe(mount, { childList: true, subtree: true });
+    _visibilityObs.observe(mount, { attributes: true, attributeFilter: ["class"], subtree: true });
+  }
+
+  /* Set aria-busy false after products are rendered */
+  const _busyObs = new MutationObserver(() => {
+    const hasReal = document.querySelector(".product-card:not(.skeleton-card)");
+    if (hasReal) { setMagazineBusy(false); _busyObs.disconnect(); }
+  });
+  const _catMount = document.getElementById("categories-mount");
+  if (_catMount) _busyObs.observe(_catMount, { childList: true, subtree: false });
+
+  /* Also observe magazine for is-visible on TOC tiles */
+  const mag = document.getElementById("magazine");
+  if (mag && mag !== mount) {
+    _visibilityObs.observe(mag, { attributes: true, attributeFilter: ["class"], subtree: true });
+  }
+}
+
+/* Run synchronously now — must happen BEFORE boot() below */
+enterpriseBoot();
+
+})(); /* end IIFE */
 
 </script>
 </body></html>
