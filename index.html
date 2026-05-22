@@ -3118,6 +3118,7 @@ body {
     <option value="">كل الأقسام</option>
   </select>
   <div class="spacer"></div>
+  <span class="result-count" id="result-count-badge" aria-live="polite" style="display:none"></span>
   <span class="status" id="status-text">جاري التحميل…</span>
   <button id="refresh-btn" type="button"><span class="ic">⟳</span><span>تحديث العروض</span></button>
   <button id="print-btn" type="button" class="primary"><span class="ic">⎙</span><span>تحميل PDF</span></button>
@@ -3416,8 +3417,12 @@ function renderProductCard(p) {
   const lblText = isCombo ? "مجاناً" : "خصم";
   const hasBadge = pctText?"":" style=\"display:none\"";
   const tagText = premiumCategoryTag(p);
+  /* High-value class: inject at render time — no post-processing needed */
+  const discNum = parseInt(String(p.discount_percent||"").replace(/[^\d]/g,""),10)||0;
+  const valueClass = discNum>=40 ? " spotlight" : discNum>=30 ? " high-value" : "";
+  const valuePill  = discNum>=30 ? `<span class="high-value-tag">${discNum>=40?"⭐ قيمة استثنائية":"✦ قيمة ممتازة"}</span>` : "";
   return `
-    <div class="product-card premium-card">
+    <div class="product-card premium-card${valueClass}">
       <div class="premium-fav">♡</div>
       <div class="badge ${badgeCls}"${hasBadge}>
         <span class="pct">${escapeHtml(pctText)}</span>
@@ -3425,7 +3430,7 @@ function renderProductCard(p) {
       </div>
       <div class="product-image">${(window.imageWithPriority ? window.imageWithPriority(productImageBlock(p)) : productImageBlock(p))}</div>
       <div class="product-copy">
-        <div class="premium-tag-row"><span class="premium-tag">${escapeHtml(tagText)}</span></div>
+        <div class="premium-tag-row"><span class="premium-tag">${escapeHtml(tagText)}</span>${valuePill}</div>
         ${p.product_name_en?`<div class="product-cat">${escapeHtml(p.product_name_en)}</div>`:""}
         <div class="product-name">${escapeHtml(p.product_name_ar||"")}</div>
         ${p.subtitle||p.description?`<div class="product-vol">${escapeHtml(p.subtitle||p.description||"")}</div>`:"<div class=\"product-vol\"></div>"}
@@ -3645,6 +3650,9 @@ function renderCategoriesMount() {
 
   mount.innerHTML = pages.join("");
   applyPageScale();
+
+  /* Enterprise: update count badge on every render */
+  if (typeof upsertResultCount === "function") upsertResultCount();
 }
 
 /* ================================================================
@@ -3895,6 +3903,9 @@ async function loadMagazine() {
 
   const now = new Date().toLocaleTimeString("ar-EG",{hour:"2-digit",minute:"2-digit"});
   setStatus(products.length+" منتج · "+now,"ok");
+
+  /* Enterprise: update result count + value classes after full load */
+  if (typeof upsertResultCount === "function") upsertResultCount();
 }
 
 /* ================================================================
@@ -4382,38 +4393,36 @@ window.retryLoad = function(btn) {
    PHASE 1-E  RESULT COUNT BADGE
    ══════════════════════════════════════════════════════════════ */
 function upsertResultCount() {
-  const toolbar = document.getElementById("toolbar");
-  if (!toolbar) return;
-
   let badge = document.getElementById("result-count-badge");
-  if (!badge) {
-    badge = document.createElement("span");
-    badge.id = "result-count-badge";
-    badge.className = "result-count";
-    badge.setAttribute("aria-live", "polite");
-    badge.setAttribute("aria-label", "عدد المنتجات المعروضة");
-    /* Insert before the first button in toolbar */
-    const firstBtn = toolbar.querySelector("button");
-    toolbar.insertBefore(badge, firstBtn);
+  if (!badge) return; /* badge must exist in HTML */
+
+  const total = (window.ALL_PRODUCTS || []).length;
+  if (!total) { badge.style.display = "none"; return; }
+
+  const filter = window.CURRENT_FILTER || {};
+  const q   = (filter.search || "").trim();
+  const cat = filter.category || "";
+
+  /* Use existing getFilteredProducts if available for accuracy */
+  let filteredCount;
+  if (typeof getFilteredProducts === "function") {
+    filteredCount = getFilteredProducts().length;
+  } else {
+    filteredCount = (window.ALL_PRODUCTS || []).filter(p => {
+      if (cat && String(p.category || "").trim().toLowerCase() !== cat) return false;
+      if (q) {
+        const hay = ((p.product_name_ar || "") + " " + (p.product_name_en || "") + " " + (p.category || "")).toLowerCase();
+        return hay.includes(q.toLowerCase());
+      }
+      return true;
+    }).length;
   }
 
-  const total    = (window.ALL_PRODUCTS || []).length;
-  const filter   = window.CURRENT_FILTER || {};
-  const q        = (filter.search || "").trim();
-  const cat      = filter.category || "";
-  const filtered = (window.ALL_PRODUCTS || []).filter(p => {
-    if (cat && String(p.category || "").trim().toLowerCase() !== cat) return false;
-    if (q) {
-      const hay = ((p.product_name_ar || "") + " " + (p.product_name_en || "") + " " + (p.category || "")).toLowerCase();
-      return hay.includes(q.toLowerCase());
-    }
-    return true;
-  }).length;
-
   const isFiltered = !!(q || cat);
+  badge.style.display = "";
   badge.className = "result-count" + (isFiltered ? " filtered" : "");
   badge.textContent = isFiltered
-    ? `عُرض ${filtered} من ${total} منتج`
+    ? `عُرض ${filteredCount} من ${total} منتج`
     : `${total} منتج`;
 }
 
